@@ -13,7 +13,10 @@ if(is_writable($fileName)) {
     $title    = str_replace('"', '^', $title);
     $url      = $results['results']['php'][$i]['title']['href'];
     $date     = $results['results']['php'][$i]['date']['text'];
-    $date     = str_replace(",", "、", $date);
+    $date     = explode(" ", $date);
+    $date     = $date[3]."/".$date[4]."/".$date[5];
+    $date     = str_replace(',', '', $date);
+
     $tag1     = $results['results']['php'][$i]['tag1']['text'];
     $tag2     = empty($results['results']['php'][$i]['tag2']['text'])     ? 0 : $results['results']['php'][$i]['tag2']['text'];
     $tag3     = empty($results['results']['php'][$i]['tag3']['text'])     ? 0 : $results['results']['php'][$i]['tag3']['text'];
