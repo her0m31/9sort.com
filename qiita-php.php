@@ -10,11 +10,11 @@ if(is_writable($fileName)) {
   for($i = 0; $i < $CountQiitaPhp; $i++) {
     $title    = $results['results']['php'][$i]['title']['text'];
     $title    = str_replace(",", "、", $title);
-
+    $title    = str_replace('"', '^', $title);
     $url      = $results['results']['php'][$i]['title']['href'];
     $date     = $results['results']['php'][$i]['date']['text'];
+    $date     = str_replace(",", "、", $date);
     $tag1     = $results['results']['php'][$i]['tag1']['text'];
-
     $tag2     = empty($results['results']['php'][$i]['tag2']['text'])     ? 0 : $results['results']['php'][$i]['tag2']['text'];
     $tag3     = empty($results['results']['php'][$i]['tag3']['text'])     ? 0 : $results['results']['php'][$i]['tag3']['text'];
     $tag4     = empty($results['results']['php'][$i]['tag4']['text'])     ? 0 : $results['results']['php'][$i]['tag4']['text'];
