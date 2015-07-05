@@ -1,4 +1,4 @@
-タイトル,URL,tag1,tag2,tag3,tag4,comments,stock
+title,URL,date,tag1,tag2,tag3,tag4,comments,stock
 64bit環境のPHPで32ビットシフトしたことにする,https://qiita.com/kt81/items/042ef627e3752fa383f1,kt81 posted on Jul 04、 2015,PHP,CakePHP,MySQL,cakephp2,2,2
 英数字のランダムパスワード作成,https://qiita.com/bboobbaa/items/d838e3e9331bf66af75e,bboobbaa posted on Jul 04、 2015,PHP,CakePHP,Paas,FuelPHP,2,7
 かつお君へ CakePHPのcryptでログイン処理を作成,https://qiita.com/bboobbaa/items/8a295184694bf8aece68,bboobbaa posted on Jul 04、 2015,PHP,CakePHP,CodeIgniter,laravel,5,4
