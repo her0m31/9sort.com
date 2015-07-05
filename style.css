@@ -1,0 +1,8 @@
+img {
+  border:solid 5px #8e44ad;
+  width:120px;
+  height: 90px
+  margin:25px auto;
+  /*border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;*/
+  padding:10px;
+}
