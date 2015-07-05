@@ -88,7 +88,7 @@ AWSのSNSを利用してスマホにプッシュを送信する（初級編）,h
 PHPで２分木構造のinsert,https://qiita.com/kiimiiis/items/ae931c9b5ff67085e7d2,Jun/18/2015,PHP,Memcached,gulp,0,0,1
 phpでvar_dumpした時の表示を整える3つの方法,https://qiita.com/yamamoto_hiroya/items/6ad6d448afcff1cf3791,Jun/18/2015,PHP,snippets,CentOS,0,0,9
 PHPでprivateメソッドをテストしやすくするTestingWrapper,https://qiita.com/RyujiAMANO/items/c93cc6da4bccd495d6f0,Jun/18/2015,PHP,googleapi,0,0,0,2
-img src=^^ はandroid端末で自ページの多重リクエストを起こす問題,https://qiita.com/kokosack/items/22ad9c3b5131bbe43e75,Jun/18/2015,PHP,Composer,0,0,0,5
+img src=’’ はandroid端末で自ページの多重リクエストを起こす問題,https://qiita.com/kokosack/items/22ad9c3b5131bbe43e75,Jun/18/2015,PHP,Composer,0,0,0,5
 Memcached::set 有効期限は30日まで,https://qiita.com/rev84/items/88b1c62e93b27c31359b,Jun/18/2015,PHP,MySQL,0,0,0,4
 snippet: php,https://qiita.com/tukiyo3/items/dabd57ca6dbd036a1a06,Jun/18/2015,PHP,Phinx,0,0,0,2
 忘れてしまうＰＨＰのデバッグ方法,https://qiita.com/daaaayoshi/items/72011cd2eb69743a077a,Jun/18/2015,PHP,JavaScript,0,0,0,2
@@ -310,7 +310,7 @@ phpでリダイレクト（301）,https://qiita.com/sin_per/items/c55cd10ea611d5
 BEAR.SundayでRESTful Web API,https://qiita.com/koriym/items/1caf2a2a13f497755c88,May/20/2015,PHP,Windows,Phalcon,0,0,10
 [PHP5.3+] PHPで曜日文字列を含む日付・時刻の書式を扱うAPI,https://qiita.com/trashtoy/items/897bbf09f113b325c08a,May/19/2015,PHP,FuelPHP,SendGrid,0,0,3
 PHPでメソッドチェインするときに気を付けること,https://qiita.com/muro/items/7a5b5f4961e6808b9992,May/19/2015,PHP,Composer,0,0,0,3
-ChromeとSafariで^Cache-Control: no-cache^が効かなかった,https://qiita.com/tokino/items/2f1e579ca836459d21a8,May/19/2015,PHP,Phalcon,0,0,0,1
+ChromeとSafariで’Cache-Control: no-cache’が効かなかった,https://qiita.com/tokino/items/2f1e579ca836459d21a8,May/19/2015,PHP,Phalcon,0,0,0,1
 Segmentation fault （PHPでsimple_html_domつかっている場合）,https://qiita.com/mochizukikotaro/items/0473055eb4cfc28aa1e1,May/19/2015,PHP,AngularJS,0,0,0,1
 Windows 環境の PHP から Oracle へ接続する,https://qiita.com/nanasess/items/efa7c027838509a44586,May/18/2015,PHP,laravel,0,0,0,3
 FuelphpのviewファイルをPC/モバイルによって振り分ける。,https://qiita.com/Tterima/items/db8df1d702c5b4a51d1e,May/18/2015,PHP,SMTP,0,0,0,3
@@ -568,7 +568,7 @@ FuelPHPでGoogleカレンダーに予定を追加したい,https://qiita.com/tak
 PHPからMeCabを利用してよみがなを取得する,https://qiita.com/sogawa@github/items/8b82a7836f9278a05631,Apr/05/2015,PHP,onepiece,websocket,0,0,12
 The NewWorld is a new world!!,https://qiita.com/TomoakiNagahara/items/110c2df05aa3cee042fe,Apr/05/2015,PHP,cakephp3,0,0,0,3
 cakePHP3でbake migrate,https://qiita.com/ukisoft/items/68c35d56a913d0afde6e,Apr/05/2015,PHP,CakePHP,0,0,0,34
-^the requested PHP extension mcrypt is missing from your system^ on Mac,https://qiita.com/ms2sato/items/bef4c12514e001a3a4a2,Apr/05/2015,PHP,PDO,0,0,0,3
+’the requested PHP extension mcrypt is missing from your system’ on Mac,https://qiita.com/ms2sato/items/bef4c12514e001a3a4a2,Apr/05/2015,PHP,PDO,0,0,0,3
 【PHP超入門】クラス～例外処理～PDOの基礎,https://qiita.com/7968/items/6f089fec8dde676abb5b,Apr/04/2015,PHP,zf2,0,0,0,1
 ZF2を使っていろいろなSELECT文を生成する,https://qiita.com/su_mi/items/ac2352598dd3edb68db8,Apr/04/2015,PHP,FuelPHP,0,0,0,5
 FuelPHPのOrmで名前付きスコープを実装する,https://qiita.com/morita21/items/deeba7a8702c2b72bc69,Apr/04/2015,PHP,PDF,0,0,0,3
@@ -764,7 +764,7 @@ PHPのbase64_encodeをURLで使用する場合に記号を%に変換しない方
 XMAPPでの状況でFuelPHPをWindows環境にインストール(手抜き版),https://qiita.com/inokou/items/1a88156195a6e48aaec9,Mar/11/2015,PHP,FPDF,nginx,0,2,8
 【PHP】タイプヒンティング,https://qiita.com/kazu56/items/50b35c9ee0e5c6c4e75e,Mar/11/2015,PHP,CSV,Scala,0,1,23
 ヤフオク(Yahoo!オークション)のページをWebスクレイピングするのに必要な情報をまとめた(最終更新日:2015.3.13),https://qiita.com/ryuichi69/items/eb83ace631ea7c6092f3,Mar/11/2015,PHP,MySQL,grunt,0,1,18
-^厳密に^ 日付時刻のフォーマットをチェックする,https://qiita.com/mpyw/items/d8c12ced65a1cd87c630,Mar/10/2015,PHP,FuelPHP,0,0,0,2
+’厳密に’ 日付時刻のフォーマットをチェックする,https://qiita.com/mpyw/items/d8c12ced65a1cd87c630,Mar/10/2015,PHP,FuelPHP,0,0,0,2
 FPDFの日本語化パッチ使用時のエラー,https://qiita.com/38kun/items/b3529bb6702e641f41df,Mar/10/2015,PHP,xampp,0,0,0,1
 日付・時刻の形式チェック,https://qiita.com/ka_to/items/010ce8a8ca8e20685def,Mar/10/2015,PHP,xampp,0,0,0,3
 vagrantでnginxでのlamp環境作ってみた,https://qiita.com/MiyaseTakurou/items/22a871144639f97d32f4,Mar/10/2015,PHP,xampp,0,0,0,2
@@ -873,7 +873,7 @@ PHPにおける不適切なFizzBuzzの一例について,https://qiita.com/eseha
 ランキング表示させる（PHP＋MySQL）,https://qiita.com/mayu_schwarz/items/0ab9eb1ec5166c284bcd,Feb/19/2015,PHP,質問,0,0,0,5
 composer installでAllowed memory size of 536870912 bytes exhaustedが出た時の対処,https://qiita.com/calmtech/items/8bb4defe0d3aaf519f3c,Feb/19/2015,PHP,CakePHP,0,0,0,14
 phpのmove_uploaded_fileのエラーについて,https://qiita.com/sysy/items/fb25a84b3d130898cb46,Feb/19/2015,PHP,singleton,0,0,0,6
-^'Safe' option is deprecated、 please use 'w' instead^の解消方法,https://qiita.com/itosho/items/17f38a2d3532880dccbe,Feb/19/2015,PHP,laravel,0,0,0,1
+’'Safe' option is deprecated、 please use 'w' instead’の解消方法,https://qiita.com/itosho/items/17f38a2d3532880dccbe,Feb/19/2015,PHP,laravel,0,0,0,1
 `php -a`で一番短くHello、 World.を出す方法,https://qiita.com/esehara@github/items/fc37eab8433ae7ed0256,Feb/19/2015,PHP,WordPress,0,0,0,1
 シングルトンの抽象化クラス＆トレイトを作成する,https://qiita.com/YusukeHigaki/items/36baa45851fd37bf56b8,Feb/19/2015,PHP,0,0,0,0,0
 Laravel5のユニークバリデーション,https://qiita.com/aooni_kun/items/8a4c78720fb846fee2e7,Feb/19/2015,PHP,0,0,0,0,0
@@ -1232,7 +1232,7 @@ PHPで画像バイナリ←→リソース変換,https://qiita.com/k-motoyan/ite
 Yii 2: Html ヘルパーを使おう,https://qiita.com/livejam_db/items/a07d45505ccbb466ac8f,Dec/16/2014,PHP,laravel,0,0,0,2
 [PHP5.3+] PHPで日付・時間操作をカンタンに出来るAPIの紹介,https://qiita.com/trashtoy/items/dcee2c039be3f5542624,Dec/16/2014,PHP,laravel,0,0,0,3
 [PHP] PDO_OCIでWHERE句にINTERVALを指定したい場合のプリペアドステートメントについて,https://qiita.com/pb_tmz08/items/0066bb88dd142a194339,Dec/16/2014,PHP,libhpdf,0,0,0,2
-'.'ドットで区切られた文字列が^0以上255以下で無い^または^整数で無い^場合に^False^を返す,https://qiita.com/tiida26/items/8a82f4bca0c077dcf4f0,Dec/16/2014,PHP,0,0,0,0,1
+'.'ドットで区切られた文字列が’0以上255以下で無い’または’整数で無い’場合に’False’を返す,https://qiita.com/tiida26/items/8a82f4bca0c077dcf4f0,Dec/16/2014,PHP,0,0,0,0,1
 PHPでのクラス定義とJavaScriptでのクラス定義を対比させてみた,https://qiita.com/h5y1m141@github/items/0ed926d90bcc3ca6e869,Dec/16/2014,PHP,0,0,0,0,15
 Laravel5 - Intro(1st),https://qiita.com/fluke8259/items/113a5809affcce1d60b6,Dec/16/2014,PHP,0,0,0,0,8
 Laravel5 - ファイル構造(2nd),https://qiita.com/fluke8259/items/5f75693ad96a759041de,Dec/16/2014,PHP,0,0,0,0,5
@@ -1718,7 +1718,7 @@ CodeIgniterの設定,https://qiita.com/hanamako/items/0db163d1bb6b3cbcb4ce,Sep/1
 RESTで、Twilioの電話番号管理をより便利に！,https://qiita.com/joohounsong/items/880fdecbbdd82377033d,Sep/17/2014,PHP,0,0,0,0,12
 PHP DBまわりのテスト,https://qiita.com/monkick@github/items/958bdc9be5a27b27db7f,Sep/17/2014,PHP,0,0,0,0,1
 WordPress TypeWriter プラグインで改行を消す方法,https://qiita.com/duloxetine/items/6536be734113575021aa,Jul/17/2014,PHP,0,0,0,0,4
-^504 Gateway Time-out^ when sending mail by SMTP in CodeIgniter,https://qiita.com/liubin/items/237dcba4d0259bf6b1d7,Sep/16/2014,PHP,0,0,0,0,0
+’504 Gateway Time-out’ when sending mail by SMTP in CodeIgniter,https://qiita.com/liubin/items/237dcba4d0259bf6b1d7,Sep/16/2014,PHP,0,0,0,0,0
 Cakephp Prefix 付きの画面で Paginator を利用する。,https://qiita.com/asahina_dev/items/50e36a7729e538897d9d,Sep/16/2014,PHP,CakePHP,CentOS,mariadb,2,2
 php-buildが動かなくなったので対応メモ,https://qiita.com/torufuruya@github/items/4cad227b7e26def3ef67,Sep/16/2014,PHP,MySQL,Redis,BEAR.Package,4,2
 CentOS 6.5 にphp5.5とMySQL5.6をyumでインストールする,https://qiita.com/ichi944/items/e24c42d1144ca1cd47d6,Sep/15/2014,PHP,nginx,CentOS,Vdebug,2,19
@@ -2021,7 +2021,7 @@ CakePHP で項目のチェックを行う。,https://qiita.com/asahina_dev/items
 [メモ]PHP5.3 遅延静的束縛,https://qiita.com/run5901/items/b3eb0afc68c83f95c6ea,Jul/08/2014,PHP,0,0,0,0,5
 EthnaのVAR_TYPE_BOOLEANに対するvalidateの挙動,https://qiita.com/GHKEN/items/167a9e90a94cef20049a,Jul/08/2014,PHP,Ethna,真夏の夜の淫夢,Apache,5,4
 PHP、文字化けせずにCSVファイルを読み込み,https://qiita.com/tsujimomo/items/1153d6f7f38cb1b0c263,Jul/08/2014,PHP,CSV,新人教育,IntelliJ,4,9
-アラビア数字文字列を ^そのまま読める^ 日本語文字列に変換,https://qiita.com/mpyw/items/e3e18954159ef79aa577,Jul/08/2014,PHP,アルゴリズム,CentOS,0,2,13
+アラビア数字文字列を ’そのまま読める’ 日本語文字列に変換,https://qiita.com/mpyw/items/e3e18954159ef79aa577,Jul/08/2014,PHP,アルゴリズム,CentOS,0,2,13
 特定アプリのapp storeでのランキングを取得する,https://qiita.com/rikkey/items/f35cbb592bf3ea5c9f0d,Jul/08/2014,PHP,PHP5,testing,0,1,7
 初めてのPHP5のはまりポイント集,https://qiita.com/ppengotsu/items/275d2cbfcc814bb0e6b4,Jul/07/2014,PHP,Apache,wmv,0,1,7
 PHP版SQL::MakerでJSON SQL Injectionの対応版を出しました,https://qiita.com/uchiko/items/490aee47362ca39d603a,Jul/07/2014,PHP,CakePHP,xdebug,0,3,4
@@ -2140,7 +2140,7 @@ Zend\Log\LoggerでZend\DI環境で使う設定,https://qiita.com/noopable/items/
 第16回関西PHP勉強会,https://qiita.com/a_yasui/items/5d816c02f515dea58dcc,Jun/19/2014,PHP,0,0,0,0,5
 PHPでXMLを返却するAPIのレスポンスを受け取りそのままCSVとしてダウンロードさせちゃう,https://qiita.com/yokozawa/items/492c09321534f1b2ba98,Jun/19/2014,PHP,0,0,0,0,6
 composer 経由で github からインストールする方法,https://qiita.com/dozo/items/20ff31816ff2b7d4b299,Jun/19/2014,PHP,GitHub,tips,Composer,9,23
-日時を、^6時間前^、 ^たった今^ など表示用文言に変換,https://qiita.com/yugokitajima/items/ad9bb8748ceaf041cc4f,Jun/19/2014,PHP,WordPress,Composer,xenv,2,12
+日時を、’6時間前’、 ’たった今’ など表示用文言に変換,https://qiita.com/yugokitajima/items/ad9bb8748ceaf041cc4f,Jun/19/2014,PHP,WordPress,Composer,xenv,2,12
 PHP の 10 進数の数値判定,https://qiita.com/kojionilk/items/62290d01d3783cc0e526,Jun/19/2014,PHP,homebrew,homebrew,0,1,17
 PHPで外部ライブラリをcomposerで管理する,https://qiita.com/rikkey/items/4462124c475a0fc35f31,Jun/19/2014,PHP,Mac,Smarty,0,0,14
 PHPでクラスライブラリを再帰的に探索して自動でrequireするオートローダーを書いてみた,https://qiita.com/zubapita/items/a131c6cc850aa5f1110c,Jun/19/2014,PHP,JavaScript,phpenv,0,0,14
@@ -2236,7 +2236,7 @@ Zend Framework 2 のイベントの流れをログる,https://qiita.com/ngyuki/i
 パスを変数に格納する,https://qiita.com/YamasakiKenta/items/6594ee2c7703d9d963f8,Jun/05/2014,PHP,0,0,0,0,3
 PHP Memcached拡張で持続的接続を行う,https://qiita.com/shin1x1/items/092588ac9b4f610b40d6,Jun/05/2014,PHP,0,0,0,0,19
 FuelPHP の Controller_Template の使用時に Response Status を変更する方法,https://qiita.com/kng/items/dfa03f52aa3d53ccb187,Jun/05/2014,PHP,0,0,0,0,9
-PHPでcURLのクソ仕様 ^@^ を回避する,https://qiita.com/mpyw/items/c2d2f9cf67072e926721,Jun/04/2014,PHP,0,0,0,0,30
+PHPでcURLのクソ仕様 ’@’ を回避する,https://qiita.com/mpyw/items/c2d2f9cf67072e926721,Jun/04/2014,PHP,0,0,0,0,30
 Vagrant+Chef Centos6.4 PHP5.3.3 → 5.3.28 バージョンアップ,https://qiita.com/Sanche/items/ecdaf51164e405925f34,Jun/04/2014,PHP,0,0,0,0,7
 PHPフレームワークphalconのディベロッパーツールを使ってみる,https://qiita.com/yuji0602/items/22d4c6c4cd78f747b8a7,Jun/04/2014,PHP,0,0,0,0,10
 Vagrant+CentOS6.5+Apache2+PHP5.3+PostgreSQL9.3 on Mac の環境を構築する,https://qiita.com/hmukaida/items/23bf728ac08c8fa31f5c,Jun/04/2014,PHP,Mac,CentOS,PostgreSQL,1,20
@@ -2376,7 +2376,7 @@ Phalcon のオートローダで Composer のライブラリをオートロー�
 Laravel with annotation,https://qiita.com/ytake/items/007d3026065f2fb6e151,May/06/2014,PHP,mamp,0,0,0,8
 herokuでDBマイグレーションにphpmigを使う,https://qiita.com/iakio/items/e9ae9fd537760b33a305,May/06/2014,PHP,0,0,0,0,9
 [PHP]unset構文と処理速度,https://qiita.com/tarunama/items/3385acb60f20c055d048,May/06/2014,PHP,0,0,0,0,6
-MAMP起動中 execで^dyld: Symbol not found^が出た時の対処法,https://qiita.com/armorik83/items/3987bf25f93f3bbbd529,May/06/2014,PHP,0,0,0,0,4
+MAMP起動中 execで’dyld: Symbol not found’が出た時の対処法,https://qiita.com/armorik83/items/3987bf25f93f3bbbd529,May/06/2014,PHP,0,0,0,0,4
 [PHP]正規表現のメモ,https://qiita.com/tarunama/items/6d57a30d20f748f2360d,May/05/2014,PHP,0,0,0,0,4
 リモートファイルのサイズを取得する,https://qiita.com/mpyw/items/8410c6f426f9aa1f2a9a,May/05/2014,PHP,0,0,0,0,11
 「for文」で繰り返しの命令をする,https://qiita.com/tsukishimaao/items/1d1c4b82c09a94b8c9c6,May/05/2014,PHP,PhpStorm,Phalcon,Zephir,1,2
@@ -2482,7 +2482,7 @@ FuelPHP開発入門_06,https://qiita.com/yumura_shiho/items/fd1b90168e4f27cd620a
 ぜんぶTIME_WAITのせいだ！,https://qiita.com/kuni-nakaji/items/c07004c7d9e5bb683bc2,Apr/15/2014,Ruby,PHP,Linux,nginx,1,318
 「第17回オフラインリアルタイムどう書くの参考問題」をPHPで解く,https://qiita.com/rana_kualu/items/8ffc6278fb64ad81366f,Apr/14/2014,PHP,どう書く,CodeIgniter,unicode,3,1
 PHP で Data::Section,https://qiita.com/s-age/items/154af169dba754faf27d,Apr/14/2014,PHP,Mac,MacOSX,0,1,4
-Macで^cdf v2 document、 corrupt: can't expand summary_info^,https://qiita.com/liubin/items/372924dee0e531839905,Apr/14/2014,PHP,CakePHP,sqs,0,6,1
+Macで’cdf v2 document、 corrupt: can't expand summary_info’,https://qiita.com/liubin/items/372924dee0e531839905,Apr/14/2014,PHP,CakePHP,sqs,0,6,1
 CakePHP dev-3 + Windows7 + IIS + MySQLの環境構築,https://qiita.com/masashi0127/items/ee1218202fff331c318b,Apr/14/2014,PHP,CakePHP,nginx,0,1,5
 [CakePHP 2.x] phpで拡張子取得方法、ファイルを使う際の便利関数 pathinfo,https://qiita.com/tsumekoara/items/85d081d83ff7505feb91,Apr/14/2014,PHP,MySQL,0,0,2,6
 phpのaddRecordメソッドの有無について,https://qiita.com/emahiro/items/e462b70e01df018df315,Apr/14/2014,PHP,どう書く,0,0,0,3

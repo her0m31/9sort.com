@@ -10,7 +10,7 @@ if(is_writable($fileName)) {
   for($i = 0; $i < $CountQiitaPhp; $i++) {
     $title    = $results['results']['php'][$i]['title']['text'];
     $title    = str_replace(",", "、", $title);
-    $title    = str_replace('"', '^', $title);
+    $title    = str_replace('"', '’', $title);
     $url      = $results['results']['php'][$i]['title']['href'];
     $date     = $results['results']['php'][$i]['date']['text'];
     $date     = explode(" ", $date);
