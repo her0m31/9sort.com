@@ -1,46 +1,44 @@
 <?
-$qiitaPhpPath        = './qiita-php.csv';
-$qiitaPhpArticles    = [];
-$qiitaPhpFilePointer = fopen($qiitaPhpPath, "r");
+$SqLite3Path = "./9sort.sqlite3";
+$offset      = 0;
 
-if($qiitaPhpFilePointer !== FALSE) {
-  //CSVファイルから1行目を取得
-  $qiitaPhpArticle = fgetcsv($qiitaPhpFilePointer, 0, ",");
-  //CSVファイルの最終行まで取得
-  while($qiitaPhpArticle !== FALSE) {
-    $qiitaPhpArticles[] = $qiitaPhpArticle;
-    $qiitaPhpArticle    = fgetcsv($qiitaPhpFilePointer, 0, ",");
-  }
-
-  fclose($qiitaPhpFilePointer);
+$nineSortDB = new SQLite3($SqLite3Path);
+if($nineSortDB === FALSE) {
+  die("DB接続失敗\n".$sqliteerror);
 }
 
-$link = new SQLite3("9sort.sqlite3", SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE, "08310831");
-if (!$link) {
-    die('接続失敗です。'.$sqliteerror);
+if(isset($_GET["page"]) == TRUE && ctype_digit($_GET["page"]) && 0 < $_GET["page"]) {
+  $offset = ($_GET["page"] - 1) * 7;
 }
-print('接続に成功しました。<br>');
-// SQLiteに対する処理
-$link->close();
-print('切断しました。<br>');
 
+$results = $nineSortDB->query("select * from qiita_js union all select * from hatena_js
+                               order by date desc limit 7 offset ". $offset .";");
+
+$article = $results->fetchArray(SQLITE3_ASSOC);
 ?>
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PURE</title>
-  <link rel="stylesheet" href="./style.css">
+  <meta charset="utf-8">
+  <title="9sort">
 </head>
 <body>
   <?
-  //for($i = 0; $i < 12; $i++) {
-  //   echo "<img src='http://capture.heartrails.com/small/?";
-  //   echo $results['results']['php'][$i]['title']['href'] . "'/>";
-  //   echo $results['results']['php'][$i]['title']['text'];
-  //   echo "<br>";
-  // }
+  $row = $results->fetchArray(SQLITE3_ASSOC);
+  while($row == TRUE) {
+    echo "<div>";
+    echo "<img src='http://capture.heartrails.com/small/?";
+    echo $row['url'] . "'/>";
+
+    echo "<a href='".$row["url"]."' target='_blank'>".$row["title"]."</a>";
+    echo $row["date"].$row["tag1"].$row["tag2"].$row["tag3"].$row["tag4"].$row["stocks"];
+    echo "</div>";
+
+    $row = $results->fetchArray(SQLITE3_ASSOC);
+  }
+
+  $results->finalize();
+  $nineSortDB->close();
   ?>
-</body>
+  </body>
 </html>

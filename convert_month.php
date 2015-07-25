@@ -38,3 +38,4 @@ function convertMonth($month) {
     return "12";
   }
 }
+?>
