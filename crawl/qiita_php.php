@@ -1,17 +1,17 @@
 <?
-$request   = "https://www.kimonolabs.com/api/d5lcnqj6?kimmodify=1?apikey=tuqSaJHUsKLOxKJBPr7vcxILzXfVDUIy";
+$request   = "https://www.kimonolabs.com/api/7lyezar2?kimmodify=1?apikey=tuqSaJHUsKLOxKJBPr7vcxILzXfVDUIy";
 $response  = file_get_contents($request);
 $kimonoApi = json_decode($response, TRUE);
 $empty     = 0;
 
-$SqLite3Path  = "./9sort.sqlite3";
+$SqLite3Path  = "../9sort.sqlite3";
 $articleTable = new SQLite3($SqLite3Path);
 if($articleTable === FALSE) {
   die("DB接続失敗\n".$sqliteerror);
 }
 
-$CountQiitaJs = count($kimonoApi);
-for($i = 0; $i < $CountQiitaJs; $i++) {
+$CountQiitaPhp = count($kimonoApi);
+for($i = 0; $i < $CountQiitaPhp; $i++) {
   //ユニークでNullを許さないURLで空でないかチェックする.空であればその後の処理をスキップ
   $url = $articleTable->escapeString($kimonoApi[$i]['title']['href']);
   if(empty($kimonoApi[$i]['title']['href'])) {
@@ -35,9 +35,9 @@ for($i = 0; $i < $CountQiitaJs; $i++) {
   $tag4  = empty($kimonoApi[$i]['tag4']['text']) ? $empty : $articleTable->escapeString($kimonoApi[$i]['tag4']['text']);
   $stock = empty($kimonoApi[$i]['stock'])        ? $empty : $kimonoApi[$i]['stock'];
   //ID,タイトル,URL,日付,タグ１,タグ2,タグ3,タグ4,ストック数,スコア
-  $articleTable->exec("INSERT OR IGNORE INTO qiita_js(title, url, date, tag1, tag2, tag3, tag4, stocks, score)
-                       VALUES('$title', '$url', '$date', '$tag1', '$tag2', '$tag3', '$tag4', $stock, $empty)");
+  $articleTable->exec("INSERT OR IGNORE INTO qiita_php(title, url, date, tag1, tag2, tag3, tag4, stocks, score)
+                        VALUES('$title', '$url', '$date', '$tag1', '$tag2', '$tag3', '$tag4', $stock, $empty)");
 }
 
-print "Crawling qiita_js OK.\n";
+print "Crawling qiita_php OK.\n";
 $articleTable->close();

@@ -6,6 +6,7 @@ if($articleTable === FALSE) {
 }
 
 require_once("./convert_month.php");
+
 require_once("./qiita_php.php");
 require_once("./qiita_js.php");
 require_once("./hatena_php.php");
