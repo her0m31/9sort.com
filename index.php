@@ -1,5 +1,5 @@
 <?
-$SqLite3Path = "./9sort.sqlite3";
+$SqLite3Path = "./crawl/9sort.sqlite3";
 $offset      = 0;
 $page        = 1;
 
@@ -13,8 +13,11 @@ if(isset($_GET["page"]) == TRUE && ctype_digit($_GET["page"]) && 0 < $_GET["page
   $page   = $_GET["page"];
 }
 
-$queryResults = $nineSortDB->query("select * from qiita_js union all select * from hatena_js
-order by date desc limit 7 offset ". $offset .";");
+$queryResults = $nineSortDB->query("select * from qiita_js   union all
+                                    select * from hatena_js  union all
+                                    select * from qiita_php  union all
+                                    select * from hatena_php
+                                    order by date desc limit 7 offset ". $offset .";");
 
 $article = $queryResults->fetchArray(SQLITE3_ASSOC);
 ?>
@@ -54,8 +57,7 @@ $article = $queryResults->fetchArray(SQLITE3_ASSOC);
         <h2 class="content-head is-center">新着記事一覧</h2>
         <div class="pure-g">
           <? while($article == TRUE): ?>
-          <div class="box">
-            <!-- <div class="l-box pure-u-5-6 pure-u-md-5-6 pure-u-lg-5-6"> -->
+          <div class="article">
             <div class="l-box pure-u-1 pure-u-md-1 pure-u-lg-1">
               <h3 class="content-subhead">
                 <i class="fa fa-terminal"></i>
@@ -67,12 +69,6 @@ $article = $queryResults->fetchArray(SQLITE3_ASSOC);
               <?
               echo "<p>タグ:".$article["tag1"].", ".$article["tag2"].", ".$article["tag3"].", ".$article["tag4"]."</p>"
               ?>
-            </div>
-            <div class="bd1 bd">
-              <div class="bdT"></div>
-              <div class="bdB"></div>
-              <div class="bdR"></div>
-              <div class="bdL"></div>
             </div>
           </div>
           <?
@@ -90,7 +86,7 @@ $article = $queryResults->fetchArray(SQLITE3_ASSOC);
         echo "<a href='./index.php?page=". $page ."'>Next...</a>";
         ?>
       </div>
-      
+
       <div class="footer is-center">
         9sort.com Projects. ver.0.1 (> <)
       </div>
