@@ -1,48 +1,32 @@
+ @import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+/* -- BASE STYLES -- */
 * {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
+  font-family: 'Noto Sans Japanese', sans-serif;
 }
 
-s.input {
-  position: relative;
-}
-
-.pure-menu-heading.pure-form {
-  position: absolute;
-  left: 50%;
-  margin-left: -110px;
-}
-
-button.fa {
-  border-style: none;
-  background-color: rgba(0,0,0,0);;
-  position: absolute;
-  top: 1px;
-  left: 165px;
-  color: #7f8c8d
-}
-
-.article {
-  width: 820px;
-  height: auto;
-  position: relative;
-  box-shadow: 1px 2px 3px rgba(0,0,0, 0.1);
-  margin-bottom: 12px;
-}
-
-/*
-* -- BASE STYLES --
-* Most of these are inherited from Base, but I want to change a few.
-*/
 body {
   color: #7f8c8d;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.7em;
+  background-color: #ecf0f1;
 }
 
-h1,h2,h3,h4,h5,h6,label {
+h1 {
   color: #34495e;
+}
+
+h2 {
+  color: #34495e;
+}
+
+h3 {
+  max-width: 620px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .pure-img-responsive {
@@ -51,70 +35,62 @@ h1,h2,h3,h4,h5,h6,label {
   margin-top: 30px;
 }
 
-/*
-* -- LAYOUT STYLES --
-* These are some useful classes which I will need
-*/
+
+
+/* -- LAYOUT STYLES -- */
 .l-box {
-  /*padding: 0.5em;*/
   padding-left: 1em;
   padding-right: 1em;
-}
-
-.l-box-lrg {
-  padding: 0.5em;
 }
 
 .is-center {
   text-align: center;
 }
 
-/*
-* -- PURE FORM STYLES --
-* Style the form inputs and labels
-*/
-/*.header .pure-form {
-  padding: 7px 10px;
-}*/
 
+/* -- PURE FORM STYLES -- */
 .header .pure-form input[type] {
   color: black;
   width: 200px;
-  height: 24px;
+  height: 20px;
   border: 1px solid #ddd;
   font-size: 60%;
   box-shadow: none;
   margin-bottom: 0em;
 }
 
-/*
-* -- PURE BUTTON STYLES --
-* I want my pure-button elements to look a little different
-*/
-.pure-button {
-  color: white;
-  padding: 0.5em 2em;
-  border-radius: 5px;
-  background-color: #1f8dd6;
+.pure-menu-heading.pure-form {
+  position: absolute;
+  left: 50%;
+  margin-left: -100px;
+  top: auto;
 }
 
-a.pure-button-primary {
-  color: #1f8dd6;
-  font-size: 120%;
-  background: white;
-  border-radius: 5px;
+search .search {
+  position: relative;
 }
 
-/*
-* -- MENU STYLES --
-* I want to customize how my .pure-menu looks at the top of the page
-*/
+/* -- PURE BUTTON STYLES -- */
+.search-btn {
+  border-style: none;
+  background-color: rgba(0,0,0,0);
+  position: absolute;
+  top: 11px;
+  left: 180px;
+  color: #7f8c8d
+}
+
+
+/* -- MENU STYLES -- */
 .home-menu {
   box-shadow: 1px 2px 3px rgba(0,0,0, 0.3);
   background: #2d3e50;
 }
+.pure-menu-horizontal.pure-menu-scrollable {
+  padding: 0px;
+}
 
-.pure-menu .pure-menu-fixed {
+.pure-menu.pure-menu-fixed {
   border-bottom: none;
   z-index: 4;
 }
@@ -143,63 +119,40 @@ a.pure-button-primary {
 .pure-menu-list {
   position: absolute;
   left: 80%;
-  height: auto;
 }
 
-.pure-menu-horizontal.pure-menu-scrollable {
-  padding: 0em;
+.fa.fa-arrows-h.fa-lg {
+  color: #AECFE5;
 }
 
-/*
-* -- CONTENT STYLES --
-* This represents the content area (everything below the blue section)
-*/
+/* -- CONTENT STYLES -- */
 .content-wrapper {
-  /* These styles are required for the "scroll-over" effect */
   width: 100%;
   z-index: 2;
   position: absolute;
   background: white;
   margin-top: 40px;
+  background-color: #ecf0f1;
 }
 
-/* This is the class used for the main content headers (<h2>) */
 .content-head {
-  margin-top: 1em;
-  margin-bottom: 1.5em;
+  padding-bottom: 5px;
+  margin-top: 1.4em;
+  margin-bottom: 1.4em;
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: rgba(255, 255, 255, 0.3) 0 1px 0;
 }
-
-.content-foot {
-  margin: 1.5em;
-}
-
-.content-foot a {
-  color: #1f8dd6;
-  text-decoration: none;
-}
-
-.content-foot a:hover {
-  color: #6FBEF3;
-  text-decoration: none;
-}
-
 
 .content {
-  max-width: 620px;
+  max-width: 660px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0px;
+  padding: 10px;
 }
 
-/* This is a modifier class used when the content-head is inside a ribbon */
-.content-head-ribbon {
-  color: white;
-}
-
-/* This is the class used for the content sub-headers (<h3>) */
 .content-subhead {
   color: #1f8dd6;
 }
@@ -218,54 +171,84 @@ a.pure-button-primary {
   margin-right: 3px;
 }
 
-.content-subhead d {
-  color:       #7f8c8d;
-  font-size:   13px;
-  line-height: 1.7em;
-  margin-left: 7px;
+.article {
+  background-color: #fff;
+  width: 640px;
+  height: auto;
+  position: relative;
+  margin-bottom: 12px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.498039) 0px 0px 1px 0px, rgba(0, 0, 0, 0.14902) 0px 1px 10px 0px;
 }
 
-/* This is the class used for the dark-background areas. */
-.ribbon {
-  color: #aaa;
-  background: #2d3e50;
+.pure-button {
+  background-color: #1f8dd6;
+  margin: 15px;
+  color: white;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.498039) 0px 0px 1px 0px, rgba(0, 0, 0, 0.14902) 0px 1px 10px 0px;
 }
 
-/* This is the class used for the footer */
 .footer {
   color: white;
   padding: 0.5em;
-  font-size: 10px;
   text-align: center;
   box-shadow: 1px 2px 3px rgba(0,0,0, 0.3);
   background: #2d3e50;
 }
 
-/*
-* -- TABLET (AND UP) MEDIA QUERIES --
-* On tablets and other medium-sized devices, we want to customize some
-* of the mobile styles.
-*/
-@media (min-width: 48em) {
-  /* We increase the body font size */
+/* -- TABLET (AND UP) MEDIA QUERIES -- */
+@media (max-width: 600px) and (orientation: portrait) {
   body {
-    font-size: 16px;
-  }
-  /* We want to give the content area some more padding */
-  .content {
-    /*padding: 1em;*/
-  }
-  /* We can align the menu header to the left, but float the
-  menu items to the right. */
-  .home-menu {
-    text-align: left;
+    font-size: 12px;
   }
 
-  .home-menu ul {
-    float: right;
+  .search-btn {
+    top: 8px;
+    left: 180px;
   }
-  /* We remove the border-separator assigned to .l-box-lrg */
-  .l-box-lrg {
-    border: none;
+}
+
+/* xperia z1f  */
+@media (max-width: 360px) and (orientation: portrait) {
+  body {
+    font-size: 12px;
+  }
+
+  /*.pure-menu-list {
+    position: absolute;
+    left: 100%;
+    margin-left: -55px;
+  }*/
+
+  .header .pure-form input[type] {
+    width: 120px;
+  }
+
+  .pure-menu-heading.pure-form {
+    margin-left: -50px;
+  }
+
+
+  .search-btn {
+    top: 0px;
+    left: 100px;
+  }
+}
+
+@media (max-width: 600px) and (orientation: landscape) {
+  body {
+    font-size: 12px;
+  }
+
+  .search-btn {
+    top: 10px;
+    left: 180px;
   }
 }
