@@ -38,8 +38,8 @@ if(isset($_GET["q"]) && !empty($_GET["q"])) {
 
   $key = str_replace("%' and title like '%", " ", $key);
 
-  $backLink = "<a class='pure-button pure-button-primary' href='./index.php?p=".($page-1)."&q=".$key."'>Back　</a>";
-  $nextLink = "<a class='pure-button pure-button-primary' href='./index.php?p=".($page+1)."&q=".$key."'>　Next</a>";
+  $backLink = "<a class='pure-button pure-button-primary' href='./index.php?p=".($page-1)."&q=".$key."'>Back</a>";
+  $nextLink = "<a class='pure-button pure-button-primary' href='./index.php?p=".($page+1)."&q=".$key."'>Next</a>";
 }
 
 $queryResults = $nineSortDB->query($query.$offset.";");
@@ -58,7 +58,7 @@ $queryResults = $nineSortDB->query($query.$offset.";");
   <body>
     <div class="header">
       <div class="home-menu pure-menu pure-menu-horizontal pure-menu-scrollable pure-menu-fixed">
-        <a class="pure-menu-heading" href="./index.php">9sort.com</a>
+        <a class="pure-menu-heading" href="./index.php">9sort.com v0.1</a>
         <form class="pure-menu-heading pure-form" method="get" action="index.php">
           <search class="search">
             <input type="text" class="pure-input-rounded" placeholder="検索" name="q" value="<? echo $key; ?>">
