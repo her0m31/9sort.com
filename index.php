@@ -1,4 +1,4 @@
-<?
+<?php
 $SqLite3Path = "./crawl/9sort.sqlite3";
 $offset = 0;
 $page   = 1;
@@ -50,7 +50,7 @@ $queryResults = $nineSortDB->query($query.$offset.";");
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>9sort.com Project</title>
+    <title>9sort Project</title>
     <link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./css/common.css">
@@ -58,10 +58,10 @@ $queryResults = $nineSortDB->query($query.$offset.";");
   <body>
     <div class="header">
       <div class="home-menu pure-menu pure-menu-horizontal pure-menu-scrollable pure-menu-fixed">
-        <a class="pure-menu-heading" href="./index.php">9sort.com</a>
+        <a class="pure-menu-heading" href="./index.php">九sort v0.1</a>
         <form class="pure-menu-heading pure-form" method="get" action="index.php">
           <search class="search">
-            <input type="text" class="pure-input-rounded" placeholder="検索" name="q" value="<? echo $key; ?>">
+            <input type="text" class="pure-input-rounded" placeholder="検索" name="q" value="<?php echo $key; ?>">
             <button type="submit" class="search-btn fa fa-search"></button>
           </search>
         </form>
@@ -78,7 +78,7 @@ $queryResults = $nineSortDB->query($query.$offset.";");
         <h2 class="content-head">一覧</h2>
         <div class="pure-g">
 
-          <?
+          <?php
           $article = $queryResults->fetchArray(SQLITE3_ASSOC);
           while($article):
             $article['title'] = htmlspecialchars($article['title'], ENT_QUOTES|ENT_HTML5);
@@ -90,16 +90,16 @@ $queryResults = $nineSortDB->query($query.$offset.";");
             <div class="l-box pure-u-1 pure-u-md-1 pure-u-lg-1">
               <h3 class="content-subhead">
                 <i class="fa fa-terminal"></i>
-                <? echo "<a href='{$article['url']}' target='_blank'>{$article['title']}</a>"; ?>
+                <?php echo "<a href='{$article['url']}' target='_blank'>{$article['title']}</a>"; ?>
               </h3>
-              <?
+              <?php
               echo "<p>{$tags}</p>";
               echo "<p>{$article["date"]}</p>"
               ?>
             </div>
           </div>
 
-          <?
+          <?php
             $article = $queryResults->fetchArray(SQLITE3_ASSOC);
           endwhile;
           $queryResults->finalize();
@@ -108,12 +108,12 @@ $queryResults = $nineSortDB->query($query.$offset.";");
 
         </div>
         <div class="linkbtn is-center">
-          <? echo $backLink; ?>
-          <? echo $nextLink; ?>
+          <?php echo $backLink; ?>
+          <?php echo $nextLink; ?>
         </div>
       </div>
       <div class="footer is-center">
-        9sort.com Projects. ver.0.2 (> <)
+        9sort Project. ver.0.1 (> <)
       </div>
     </div>
   </body>
