@@ -1,3 +1,53 @@
+.test {
+  text-align: right;
+}
+
+label {
+    display: block;
+}
+
+input[type="checkbox"].on-off{
+    display: none;
+}
+
+.article ul {
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -ms-transition: all .5s;
+    -o-transition: all .5s;
+    transition: all .5s;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: auto;
+}
+
+.article li {
+    padding: 5px;
+    letter-spacing: normal;
+}
+
+.article a {
+  color: #1f8dd6;
+  text-decoration: none;
+}
+
+.article a:hover {
+  color: #6FBEF3;
+  text-decoration: none;
+}
+
+input[type="checkbox"].on-off + ul{
+    height: 0;
+    overflow: hidden;
+}
+
+input[type="checkbox"].on-off:checked + ul{
+    height: 120px;
+}
+
+
+
  @import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
 /* -- BASE STYLES -- */
 * {

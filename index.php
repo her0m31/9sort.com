@@ -58,7 +58,7 @@ $queryResults = $nineSortDB->query($query.$offset.";");
   <body>
     <div class="header">
       <div class="home-menu pure-menu pure-menu-horizontal pure-menu-scrollable pure-menu-fixed">
-        <a class="pure-menu-heading" href="./index.php">九sort v0.1</a>
+        <a class="pure-menu-heading" href="./index.php">9sort v0.2</a>
         <form class="pure-menu-heading pure-form" method="get" action="index.php">
           <search class="search">
             <input type="text" class="pure-input-rounded" placeholder="検索" name="q" value="<?php echo $key; ?>">
@@ -77,29 +77,38 @@ $queryResults = $nineSortDB->query($query.$offset.";");
       <div class="content">
         <h2 class="content-head">一覧</h2>
         <div class="pure-g">
-
           <?php
           $article = $queryResults->fetchArray(SQLITE3_ASSOC);
+          $i = 0;
           while($article):
             $article['title'] = htmlspecialchars($article['title'], ENT_QUOTES|ENT_HTML5);
             $tags = htmlspecialchars("タグ: {$article['tag1']} {$article['tag2']} {$article['tag3']} {$article['tag4']}");
             $tags = str_replace(' 0', '', $tags);
           ?>
-
           <div class="article">
-            <div class="l-box pure-u-1 pure-u-md-1 pure-u-lg-1">
-              <h3 class="content-subhead">
-                <i class="fa fa-terminal"></i>
-                <?php echo "<a href='{$article['url']}' target='_blank'>{$article['title']}</a>"; ?>
-              </h3>
-              <?php
-              echo "<p>{$tags}</p>";
-              echo "<p>{$article["date"]}</p>"
-              ?>
-            </div>
+            <label for="Panel<?php echo $i;?>">
+              <div class="l-box pure-u-1 pure-u-md-1 pure-u-lg-1">
+                <h3 class="content-subhead">
+                  <i class="fa fa-terminal"></i>
+                  <?php echo "<a href='{$article['url']}' target='_blank'>{$article['title']}</a>"; ?>
+                </h3>
+                <?php
+                echo "<p>{$tags}</p>";
+                echo "<p>{$article["date"]}</p>"
+                ?>
+                <div class="test">To Realize...</div>
+              </div>
+              <input type="checkbox" id="Panel<?php echo $i;?>" class="on-off" />
+              <ul>
+                  <li><?php echo "<a href='{$article['url']}' target='_blank'>{$article['title']}</a>"; ?></li>
+                  <li><?php echo "<a href='{$article['url']}' target='_blank'>{$article['title']}</a>"; ?></li>
+                  <li><?php echo "<a href='{$article['url']}' target='_blank'>{$article['title']}</a>"; ?></li>
+              </ul>
+            </label>
           </div>
 
           <?php
+            $i++;
             $article = $queryResults->fetchArray(SQLITE3_ASSOC);
           endwhile;
           $queryResults->finalize();
@@ -113,7 +122,7 @@ $queryResults = $nineSortDB->query($query.$offset.";");
         </div>
       </div>
       <div class="footer is-center">
-        9sort Project. ver.0.1 (> <)
+        9sort Project. ver0.2 (> <)
       </div>
     </div>
   </body>
