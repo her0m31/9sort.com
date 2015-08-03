@@ -1,55 +1,6 @@
-.test {
-  text-align: right;
-}
-
-label {
-    display: block;
-}
-
-input[type="checkbox"].on-off{
-    display: none;
-}
-
-.article ul {
-    -webkit-transition: all .5s;
-    -moz-transition: all .5s;
-    -ms-transition: all .5s;
-    -o-transition: all .5s;
-    transition: all .5s;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    width: auto;
-}
-
-.article li {
-    padding: 5px;
-    letter-spacing: normal;
-}
-
-.article a {
-  color: #1f8dd6;
-  text-decoration: none;
-}
-
-.article a:hover {
-  color: #6FBEF3;
-  text-decoration: none;
-}
-
-input[type="checkbox"].on-off + ul{
-    height: 0;
-    overflow: hidden;
-}
-
-input[type="checkbox"].on-off:checked + ul{
-    height: 120px;
-}
-
-
-
- @import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
 /* -- BASE STYLES -- */
+@import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+
 * {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -85,8 +36,6 @@ h3 {
   margin-top: 30px;
 }
 
-
-
 /* -- LAYOUT STYLES -- */
 .l-box {
   padding-left: 1em;
@@ -96,7 +45,6 @@ h3 {
 .is-center {
   text-align: center;
 }
-
 
 /* -- PURE FORM STYLES -- */
 .header .pure-form input[type] {
@@ -153,7 +101,6 @@ search .search {
 
 .pure-menu.pure-menu-fixed {
   border-bottom: none;
-  z-index: 4;
 }
 
 .home-menu .pure-menu-heading {
@@ -189,29 +136,38 @@ search .search {
 /* -- CONTENT STYLES -- */
 .content-wrapper {
   width: 100%;
-  z-index: 2;
   position: absolute;
   background: white;
   margin-top: 40px;
   background-color: #ecf0f1;
+  z-index: -2;
 }
 
-.content-head {
-  padding-bottom: 5px;
-  margin-top: 1.4em;
-  margin-bottom: 1.4em;
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  box-shadow: rgba(255, 255, 255, 0.3) 0 1px 0;
-}
+/*.content-wrapper video {
+  position: fixed;
+  width: auto;
+  height: auto;
+  z-index: -1;
+  background: url(img/Hello-World.jpg) no-repeat;
+  background-size: cover;
+}*/
 
 .content {
   max-width: 660px;
   margin-left: auto;
   margin-right: auto;
   padding: 10px;
+}
+
+.content-head {
+  padding-bottom: 5px;
+  margin-top: 1.4em;
+  margin-bottom: 1.4em;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: rgba(255, 255, 255, 0.3) 0 1px 0;
 }
 
 .content-subhead {
@@ -232,11 +188,11 @@ search .search {
   margin-right: 3px;
 }
 
+/* ARTICLE BOX STYLES*/
 .article {
   background-color: #fff;
   width: 640px;
   height: auto;
-  position: relative;
   margin-bottom: 12px;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
@@ -245,6 +201,56 @@ search .search {
   box-shadow: rgba(0, 0, 0, 0.498039) 0px 0px 1px 0px, rgba(0, 0, 0, 0.14902) 0px 1px 10px 0px;
 }
 
+.article ul {
+  text-align: right;
+  -webkit-transition: all .5s;
+  -moz-transition: all .5s;
+  -ms-transition: all .5s;
+  -o-transition: all .5s;
+  transition: all .5s;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: auto;
+}
+
+.article li {
+  padding: 5px;
+  letter-spacing: normal;
+}
+
+.article a {
+  color: #1f8dd6;
+  text-decoration: none;
+}
+
+.article a:hover {
+  color: #6FBEF3;
+  text-decoration: none;
+}
+
+.is-right {
+  text-align: right;
+}
+
+label {
+  display: block;
+}
+
+input[type="checkbox"].on-off {
+  display: none;
+}
+
+input[type="checkbox"].on-off+ul {
+  height: 0;
+  overflow: hidden;
+}
+
+input[type="checkbox"].on-off:checked+ul {
+  height: 120px;
+}
+
+/* FOOTER STYLES */
 .footer {
   color: white;
   padding: 0.5em;
