@@ -53,8 +53,7 @@ $queryResults = $nineSortDB->query($query.$offset.";");
   <title>9sort Project</title>
   <link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="./css/common.css">
-  <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+  <link rel="stylesheet" href="css/common.css">
 </head>
 <body>
   <div class="header">
@@ -67,6 +66,7 @@ $queryResults = $nineSortDB->query($query.$offset.";");
         </search>
       </form>
       <ul class="pure-menu-list">
+        <li class="pure-menu-item"><a href="index.php" class="pure-menu-link fa fa-play"> Top</a></li>
         <li class="pure-menu-item"><a href="" class="pure-menu-link">About</a></li>
         <li class="pure-menu-item"><a href="" class="pure-menu-link">Log In</a></li>
       </ul>
@@ -74,12 +74,12 @@ $queryResults = $nineSortDB->query($query.$offset.";");
   </div>
 
   <div class="content-wrapper">
-
-    <!-- <video autoplay loop class="fillWidth">
-      <source src="img/Hello-World.mp4" type="video/mp4"/>Your browser does not support the video tag. I suggest you upgrade your browser.
-      <source src="img/Hello-World.webm" type="video/webm"/>Your browser does not support the video tag. I suggest you upgrade your browser.
-    </video> -->
-
+    <!--
+    <video autoplay loop class="fillWidth">
+    <source src="img/Hello-World.mp4" type="video/mp4"/>Your browser does not support the video tag. I suggest you upgrade your browser.
+    <source src="img/Hello-World.webm" type="video/webm"/>Your browser does not support the video tag. I suggest you upgrade your browser.
+    </video>
+    -->
     <div class="content">
       <h2 class="content-head">一覧</h2>
       <div class="pure-g">
