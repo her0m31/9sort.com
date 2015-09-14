@@ -1,5 +1,5 @@
 /* -- BASE STYLES -- */
-@import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+/** @import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css); */
 
 * {
   box-sizing: border-box;
