@@ -1,4 +1,4 @@
-<?
+<?php
 $request   = "https://www.kimonolabs.com/api/72iumaa6?kimmodify=1?apikey=tuqSaJHUsKLOxKJBPr7vcxILzXfVDUIy";
 $response  = file_get_contents($request);
 $kimonoApi = json_decode($response, TRUE);
@@ -12,7 +12,6 @@ if($articleTable === FALSE) {
 
 $countHatenaPhp = count($kimonoApi);
 for($i = 0; $i < $countHatenaPhp; $i++) {
-  //ユニークでNullを許さないURLで空でないかチェックする.空であればその後の処理をスキップ
   $url = $articleTable->escapeString($kimonoApi[$i]['title']['href']);
   if(empty($kimonoApi[$i]['title']['href'])) {
     continue;
@@ -22,7 +21,6 @@ for($i = 0; $i < $countHatenaPhp; $i++) {
   $date  = $articleTable->escapeString($kimonoApi[$i]['date']);
 
   $tag1  = $articleTable->escapeString($kimonoApi[$i]['tag1']['text']);
-  //tag1と違いtag2~4,comments,stockに関しては空の可能性がある.タグやコメントが無い場合、エラーが発生するのでemptyで検査する.
   $tag2  = empty($kimonoApi[$i]['tag2']['text'])  ? $empty : $articleTable->escapeString($kimonoApi[$i]['tag2']['text']);
   $tag3  = empty($kimonoApi[$i]['tag3']['text'])  ? $empty : $articleTable->escapeString($kimonoApi[$i]['tag3']['text']);
   $tag4  = empty($kimonoApi[$i]['tag4']['text'])  ? $empty : $articleTable->escapeString($kimonoApi[$i]['tag4']['text']);
@@ -35,3 +33,4 @@ for($i = 0; $i < $countHatenaPhp; $i++) {
 
 print "Crawling hatena_php OK.\n";
 $articleTable->close();
+?>
