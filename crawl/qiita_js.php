@@ -4,7 +4,7 @@ $response  = file_get_contents($request);
 $kimonoApi = json_decode($response, TRUE);
 $empty     = 0;
 
-$SqLite3Path  = "/home/her8m/www/9sort.sqlite3";
+$SqLite3Path  = dirname(__FILE__)."/../../9sort.sqlite3";
 $articleTable = new SQLite3($SqLite3Path);
 if($articleTable === FALSE) {
   die("DB接続失敗\n".$sqliteerror);

@@ -1,5 +1,5 @@
 <?php
-$SqLite3Path = "./crawl/9sort.sqlite3";
+$SqLite3Path = dirname(__FILE__)."/../9sort.sqlite3";
 $offset = 0;
 $page   = 1;
 $key    = "";
