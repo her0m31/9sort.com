@@ -1,5 +1,4 @@
-<?
-//英月名から対応する数字文字列を返す
+<?php
 function convertMonth($month) {
   if("Jan" == $month) {
     return "01";
