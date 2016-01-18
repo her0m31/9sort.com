@@ -2,23 +2,22 @@
 /** サンプルプログラム : nlp_ai/training_code/class/Corpus_20NewsGroup.php
   * [説明]
   * 「20 News Groups」コーパスを簡便に取得するためのクラス。
-  * 
+  *
   * プログラムのエンコーディングはUTF-8。
   */
 
 class Corpus_20NewsGroups
 {
-    /** 
+    /**
       * @var    string      訓練用コーパスのインストールディレクトリ
       */
-    var $trainingRoot       = '/home/nlp_ai/training_code/20news-bydate-train';
-    
-    /** 
+    var $trainingRoot       = '/home/vagrant/dev/9sort.com/ml/20news-bydate-train';
+
+    /**
       * @var    string      評価用コーパスのインストールディレクトリ
       */
-    var $testRoot           = '/home/nlp_ai/training_code/20news-bydate-test';
-    
-    
+    var $testRoot           = '/home/vagrant/dev/9sort.com/ml/20news-bydate-test';
+
     /** コーパスディレクトリに含まれるカテゴリディレクトリのリストを取得する。
       * コーパスディレクトリ直下にぶら下がっているサブディレクトリの名前がカテゴリ名に相当する。
       * @param              string          base_dir            コーパスディレクトリ
@@ -28,11 +27,11 @@ class Corpus_20NewsGroups
     {
         $dh     = @opendir( $base_dir );
         if( is_resource( $dh ) ){
-            /** 
+            /**
               * @var    array       カテゴリリスト
               */
             $categoryList       = array();
-            
+
             while( ( $eachEntry = readdir( $dh ) ) !== false )
             {
                 if( $eachEntry !== '.' && $eachEntry !== '..' ){
@@ -46,9 +45,9 @@ class Corpus_20NewsGroups
                     $base_dir );
         }
     }
-    
-    
-    
+
+
+
     /** カテゴリディレクトリを指定し、コーパスファイルのパスのリストを取得する。
       * @param              string              corpus_root             コーパスファイルのルートディレクトリ
       * @param              string              category_dir            カテゴリディレクトリ
@@ -59,11 +58,11 @@ class Corpus_20NewsGroups
         $dirPath    = sprintf( '%s/%s' , $corpus_root , $category_dir );
         $dh         = @opendir( $dirPath );
         if( is_resource( $dh ) ){
-            /** 
+            /**
               * @var    array       コーパスファイルのパスのリスト
               */
             $filePathList       = array();
-            
+
             while( ( $eachEntry = readdir( $dh ) ) !== false )
             {
                 if( $eachEntry !== '.' && $eachEntry !== '..' ){
@@ -79,9 +78,9 @@ class Corpus_20NewsGroups
                     $dirPath );
         }
     }
-    
-    
-    
+
+
+
     /** 訓練用コーパスのカテゴリ一覧を取得する。
       * @param              なし
       * @return             array       カテゴリ一覧
@@ -90,9 +89,9 @@ class Corpus_20NewsGroups
     {
         return $this->getCategoryList( $this->trainingRoot );
     }
-    
-    
-    
+
+
+
     /** 評価用コーパスのカテゴリ一覧を取得する。
       * @param              なし
       * @return             array       カテゴリ一覧
@@ -101,9 +100,9 @@ class Corpus_20NewsGroups
     {
         return $this->getCategoryList( $this->testRoot );
     }
-    
-    
-    
+
+
+
     /** カテゴリを指定して、訓練用コーパスファイルの一覧を取得する。
       * @param              string              category            カテゴリ
       * @return             array               コーパスファイルの一覧
@@ -112,9 +111,9 @@ class Corpus_20NewsGroups
     {
         return $this->getFilePathList( $this->trainingRoot , $category );
     }
-    
-    
-    
+
+
+
     /** カテゴリを指定して、評価用コーパスファイルの一覧を取得する。
       * @param              string              category            カテゴリ
       * @return             array               コーパスファイルの一覧
@@ -123,9 +122,9 @@ class Corpus_20NewsGroups
     {
         return $this->getFilePathList( $this->testRoot , $category );
     }
-    
-    
-    
+
+
+
     /** コーパスのパスを指定し、内容を取得する。
       * @param              string              file_path               投稿メールテキストのパス
       * @return             string              内容
@@ -148,9 +147,9 @@ class Corpus_20NewsGroups
             return null;
         }
     }
-    
-    
-    
+
+
+
     /** パスを指定して訓練用コーパスの内容を取得する。
       * @param          string          path        パス
       * @return         string          コーパスの内容
@@ -159,9 +158,9 @@ class Corpus_20NewsGroups
     {
         return $this->getContent( sprintf( '%s/%s' , $this->trainingRoot , $path ) );
     }
-    
-    
-    
+
+
+
     /** パスを指定して評価用コーパスの内容を取得する。
       * @param          string          path        パス
       * @return         string          コーパスの内容
@@ -170,7 +169,7 @@ class Corpus_20NewsGroups
     {
         return $this->getContent( sprintf( '%s/%s' , $this->testRoot , $path ) );
     }
-    
+
 }
 
 ?>
