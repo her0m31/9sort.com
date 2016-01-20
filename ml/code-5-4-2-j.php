@@ -1,19 +1,15 @@
 <?php
 /* 文書の判定用スコアを計算する */
-
 /* Corpus_Kentei クラスを読み込む */
 require_once('class/Corpus_Kentei.php');
 /* Morpheme クラスを読み込む */
 require_once('class/Morpheme.php');
 /* BayesLearning_Kentei クラスを読み込む */
 require_once('class/BayesLearning_Kentei.php');
-
 /* @var object BayesLearning_Kentei クラスから生成したオブジェクト */
 $bayesKentei = new BayesLearning_Kentei();
-
 /* MySQLに接続するためのパスワードを記入すること */
-$bayesKentei->pdoPassword = '********';
-
+$bayesKentei->pdoPassword = 'root';
 /* @var object Corpus_Kentei クラスから生成したオブジェクト */
 $ckentei = new Corpus_Kentei();
 
@@ -32,12 +28,10 @@ if(is_object($ckentei)) {
       printf("●カテゴリ : %s\n", $eachCategory);
       printf("------------------------------------------------------------\n");
 
-      /** 分類辞書をメモリ上に読み込む。
-      * 判定用スコアを計算するので、単語の最低出現回数は2回に引き下げる（第2引数に2を指定）
-      */
+      /* 分類辞書をメモリ上に読み込む 判定用スコアを計算するので、単語の最低出現回数は2回に引き下げる（第2引数に2を指定 */
       $bayesKentei->loadDictionary($eachCategory, 2);
 
-      /* (1) $eachCategory に属するコーパスの判定用スコアの分布を調べる。 */
+      /* $eachCategory に属するコーパスの判定用スコアの分布を調べる */
       /* $eachCategory に属するコーパスの判定用スコアの分布を記録する */
       $scoreDistTarget = array();
 

@@ -1,15 +1,10 @@
 <?php
-/**
-* 「けんてーごっこ」コーパスを簡便に取得するためのクラス。
-* プログラムのエンコーディングはUTF-8。
-*/
-
+/*「けんてーごっこ」コーパスを簡便に取得するためのクラス */
 class Corpus_Kentei {
   /* @var string 訓練用コーパスのインストールディレクトリ */
-  var $trainingRoot = '/home/nlp_ai/training_code/kentei_corpus/training';
-
+  var $trainingRoot = '/home/vagrant/dev/9sort.com/ml/20news-bydate-train';
   /* @var string 評価用コーパスのインストールディレクトリ */
-  var $testRoot = '/home/nlp_ai/training_code/kentei_corpus/test';
+  var $testRoot = '/home/vagrant/dev/9sort.com/ml/20news-bydate-test';
 
   /** コーパスディレクトリに含まれるカテゴリディレクトリのリストを取得する。
   * コーパスディレクトリ直下にぶら下がっているサブディレクトリの名前がカテゴリ名に相当する。

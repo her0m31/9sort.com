@@ -1,34 +1,20 @@
 <?php
-/**
-* [説明]
-* 「けんてーごっこ」コーパス用のベイジアンフィルタクラス。
-* 機械学習処理機能、判定機能を持つ。
-*
-* プログラムのエンコーディングはUTF-8。
-*/
-
+/*「けんてーごっこ」コーパス用のベイジアンフィルタクラス 機械学習処理機能 判定機能を持つ */
 class BayesLearning_Kentei {
   /* @var object Corpus_Kentei クラスから生成したオブジェクト */
   var $ckentei = null;
-
   /* @var object Morpheme クラスから生成したオブジェクト */
   var $m = null;
-
   /* @var object PDO拡張モジュールのオブジェクト */
   var $dbh = null;
-
   /* @var string MySQLに接続するためのDSN */
   var $dsn = 'mysql:host=localhost;dbname=nlp_ai';
-
   /* @var string PDO用接続ユーザ名 */
   var $pdoUsername = 'root';
-
   /* @var string PDO用接続パスワード。インストール時に設定したパスワードをセットする */
   var $pdoPassword = null;
-
   /* @var array 分類辞書を格納する配列。文書分類時に使用する */
   var $dictionary = array();
-
   /* @var int 分類辞書を読み込んだフィルタID */
   var $loadedFilterId = null;
 

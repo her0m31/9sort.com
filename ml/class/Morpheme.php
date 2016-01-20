@@ -1,9 +1,5 @@
 <?php
-/**
-* 形態素解析クラス。
-* 日本語と英語の文書の形態素解析に対応する。
-*/
-
+/* 形態素解析クラス 日本語と英語の文書の形態素解析に対応する */
 class Morpheme {
   // @var object php_mecabオブジェクト
   var $mecab = null;
