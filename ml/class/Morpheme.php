@@ -27,7 +27,7 @@ class Morpheme {
     $resultSet = explode("\n", $this->mecab->parse($text));
 
     foreach($resultSet as $eachResult) {
-      if(substr($eachResult, 0, 3) !== 'EOS') {
+      if(substr($eachResult, 0, 3) !== 'EOS' && !empty($eachResult)) {
         /* 形態素と情報部分に分割する */
         list($eachMorpheme, $eachInfo) = explode("\t", $eachResult);
 
@@ -41,16 +41,16 @@ class Morpheme {
         }
 
         /* 形態素解析結果(戻り値用)に追加する */
-        $morphemeList[] = array( 'word' => $eachMorpheme,
-          'info' => array('type'             => $infoColumns[0],
-                          'category_1'       => $infoColumns[1],
-                          'category_2'       => $infoColumns[2],
-                          'category_3'       => $infoColumns[3],
-                          'conjugation_type' => $infoColumns[4],
-                          'conjugation_form' => $infoColumns[5],
-                          'prototype'        => $infoColumns[6],
-                          'yomigana'         => $infoColumns[7],
-                          'yomigana_alt'     => $infoColumns[8]));
+        $morphemeList[] = array('word' => $eachMorpheme,
+        'info' => array('type' => $infoColumns[0],
+        'category_1'       => $infoColumns[1],
+        'category_2'       => $infoColumns[2],
+        'category_3'       => $infoColumns[3],
+        'conjugation_type' => $infoColumns[4],
+        'conjugation_form' => $infoColumns[5],
+        'prototype'        => $infoColumns[6],
+        'yomigana'         => $infoColumns[7],
+        'yomigana_alt'     => $infoColumns[8]));
       }
     }
 
@@ -130,4 +130,4 @@ class Morpheme {
       return $morphemeList;
     }
   }
-?>
+  ?>

@@ -1,5 +1,6 @@
 <?php
 /* ベイジアンフィルタの機械学習処理を実施する */
+
 /* Corpus_Kentei クラスを読み込む */
 require_once('class/Corpus_Kentei.php');
 /* Morpheme クラスを読み込む */

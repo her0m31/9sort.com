@@ -1,0 +1,92 @@
+●PSP改造の検定
+
+PSPのCFW関連の検定です｡
+
+
+[第1問] Team GENがﾘﾘｰｽした最後のCFWは？
+
+(1) CFW 6.35 Custom
+
+(2) CFW 5.50 Prometheus-4
+
+(3) CFW 5.50 GEN-D3 final version
+
+(4) CFW 6.10 GEN-A
+
+
+[第2問] EBOOT.PBPを署名するﾂｰﾙで正しいのはどれ？
+
+(1) GENEncrypterP001
+
+(2) prxEncrypterP001
+
+(3) PromeEncrypterP001
+
+(4) TNEncrypterP001
+
+
+[第3問] OFW 6.37ではどのexploitが塞がれたか？
+
+(1) ﾊﾟﾀﾎﾟﾝ2体験版のsavedata exploit
+
+(2) みんなのｽｯｷﾘのsavedata exploit
+
+(3) みんなのｺﾞﾙﾌ1のsavedata exploit
+
+(4) みんなのｺﾞﾙﾌ2のsavedata exploit
+
+
+[第4問] 日本で製作されたCFW(LCFW)とは？
+
+(1) 5.50 Prometheus-4
+
+(2) 6.35 PRO-A1
+
+(3) 6.20 TN-C
+
+(4) 6.35 Custom
+
+
+[第5問] CFW 6.35 Customの対応しているPSPは？
+
+(1) PSP-1000
+
+(2) PSP-2000(非対策基盤)
+
+(3) PSP-2000(対策基盤)
+
+(4) PSP-3000
+
+
+[第6問] CFWを導入しているPSPでRecoveryModeを起動するにはどのﾎﾞﾀﾝを押せばいい？
+
+(1) STARTﾎﾞﾀﾝを押して電源を入れる
+
+(2) HOMEﾎﾞﾀﾝを押して電源を入れる
+
+(3) Rﾄﾘｶﾞｰを押して電源を入れる
+
+(4) Lﾄﾘｶﾞｰを押して電源を入れる
+
+
+[第7問] CFWを導入したPSPで出来ることとして間違っているのはどれ？
+
+(1) YouTubeなどの動画ｻｲﾄの動画を視聴
+
+(2) ｽｸﾘｰﾝｼｮｯﾄの撮影
+
+(3) PSP-1000でﾜﾝｾｸﾞ視聴
+
+(4) PSP-1000でUSB充電
+
+
+[第8問] みんなのｽｯｷﾘのsavedata exploitを公開した人物は？
+
+(1) Jeerum
+
+(2) m0skit0
+
+(3) minomushi
+
+(4) maku
+
