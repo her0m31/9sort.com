@@ -2,9 +2,9 @@
 /*「けんてーごっこ」コーパスを簡便に取得するためのクラス */
 class Corpus_Kentei {
   /* @var string 訓練用コーパスのインストールディレクトリ */
-  var $trainingRoot = '/home/vagrant/dev/9sort.com/ml/20news-bydate-train';
+  var $trainingRoot = '/home/vagrant/dev/9sort.com/ml/training';
   /* @var string 評価用コーパスのインストールディレクトリ */
-  var $testRoot = '/home/vagrant/dev/9sort.com/ml/20news-bydate-test';
+  var $testRoot = '/home/vagrant/dev/9sort.com/ml/test';
 
   /** コーパスディレクトリに含まれるカテゴリディレクトリのリストを取得する。
   * コーパスディレクトリ直下にぶら下がっているサブディレクトリの名前がカテゴリ名に相当する。

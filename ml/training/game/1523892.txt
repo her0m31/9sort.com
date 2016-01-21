@@ -1,0 +1,102 @@
+●PvP STANDARD
+
+このテストはEVE ONLINEにおけるあなたの知識を数値化します。
+
+
+[第1問] 一般的に、トラッキング能力がもっとも高いタレットは次のうちどれか。
+
+(1) Autocannon
+
+(2) Blaster
+
+(3) Laser
+
+
+[第2問] ワープドライブを起動することができる、ワープ目標までの距離の下限は次のうちどれか。
+
+(1) 100km
+
+(2) 150km
+
+(3) 200km
+
+(4) 300km
+
+
+[第3問] あるタレットに示されているFalloffの数値とおなじ距離で、目標を攻撃しているときのDPSは、カタログスペックの何％か、次のうちから選べ。なお、TransversialやSignature Radiusは考慮しないものとする。
+
+(1) 100%
+
+(2) 75%
+
+(3) 50%
+
+(4) 25%
+
+
+[第4問] Aggression Timerの効果時間は何秒か。次のうちから選べ。
+
+(1) 60秒
+
+(2) 45秒
+
+(3) 30秒
+
+
+[第5問] Serpentis戦艦のもつボーナスであるStasis Webifier Effectivenes（ステイシスウェビファイアー効果乗数）はなにを表すか、次から選べ。
+
+(1) Stasis Webifierの射程範囲。
+
+(2) Stasis Webifier使用時の消費電力。
+
+(3) Stasis Webifierを照射された対象の速度減衰効果。
+
+
+[第6問] 一般的に最もトラッキング能力の高いSentry Droneは、次のうちどれか。
+
+(1) Bouncer
+
+(2) Curator
+
+(3) Garde
+
+(4) Warden
+
+
+[第7問] 理論上可能な最大ロックレンジは何kmか、次のうちから選べ。
+
+(1) 150km
+
+(2) 200km
+
+(3) 250km
+
+
+[第8問] Lowsecゲートに配置されたGate Sentryの一門あたりのDPSは次のうちどれか。
+
+(1) 150
+
+(2) 200
+
+(3) 300
+
+
+[第9問] 次のうち、Tracking乗数が1.2xのProjectile Ammoはどれか。
+
+(1) Fusion
+
+(2) EMP
+
+(3) Titanum Sabot
+
+(4) Barrage
+
+
+[第10問] 「お前誰だよ」と言ったのは誰か。次のうちから選べ。
+
+(1) the mittani
+
+(2) 坪井さん
+
+(3) stepkun
+

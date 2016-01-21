@@ -1,5 +1,6 @@
 <?php
 /* 文書の判定用スコアを計算し、コーパスを分類する */
+
 /* Corpus_Kentei クラスを読み込む */
 require_once('class/Corpus_Kentei.php');
 /* Morpheme クラスを読み込む */
