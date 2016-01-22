@@ -18,10 +18,13 @@ class Corpus_Kentei {
       $categoryList = array();
 
       while(($eachEntry = readdir($dh)) !== false) {
-        if($eachEntry !== '.' && $eachEntry !== '..') {
+        var_dump($eachEntry);
+
+        if($eachEntry !== '.' && $eachEntry !== '..' && $eachEntry !== '.DS_Store') {
           $categoryList[] = $eachEntry;
         }
       }
+
       closedir($dh);
       return $categoryList;
     } else {
