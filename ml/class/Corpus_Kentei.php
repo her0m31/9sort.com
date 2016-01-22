@@ -18,8 +18,6 @@ class Corpus_Kentei {
       $categoryList = array();
 
       while(($eachEntry = readdir($dh)) !== false) {
-        var_dump($eachEntry);
-
         if($eachEntry !== '.' && $eachEntry !== '..' && $eachEntry !== '.DS_Store') {
           $categoryList[] = $eachEntry;
         }
@@ -45,7 +43,9 @@ class Corpus_Kentei {
       $filePathList = array();
 
       while(($eachEntry = readdir($dh)) !== false) {
-        if($eachEntry !== '.' && $eachEntry !== '..') {
+        var_dump($eachEntry);
+
+        if($eachEntry !== '.' && $eachEntry !== '..' && $eachEntry !== '.DS_Store') {
           $filePathList[] = sprintf('%s/%s', $category_dir, $eachEntry);
         }
       }
