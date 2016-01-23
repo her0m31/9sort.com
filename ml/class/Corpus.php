@@ -1,6 +1,6 @@
 <?php
-/*「けんてーごっこ」コーパスを簡便に取得するためのクラス */
-class Corpus_Kentei {
+/* コーパスを簡便に取得するためのクラス */
+class Corpus {
   /* @var string 訓練用コーパスのインストールディレクトリ */
   var $trainingRoot = '/home/vagrant/dev/9sort.com/ml/training';
   /* @var string 評価用コーパスのインストールディレクトリ */
