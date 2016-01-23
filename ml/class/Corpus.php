@@ -1,6 +1,6 @@
 <?php
-/*「けんてーごっこ」コーパスを簡便に取得するためのクラス */
-class Corpus_Kentei {
+/* コーパスを簡便に取得するためのクラス */
+class Corpus {
   /* @var string 訓練用コーパスのインストールディレクトリ */
   var $trainingRoot = '/home/vagrant/dev/9sort.com/ml/training';
   /* @var string 評価用コーパスのインストールディレクトリ */
@@ -18,10 +18,11 @@ class Corpus_Kentei {
       $categoryList = array();
 
       while(($eachEntry = readdir($dh)) !== false) {
-        if($eachEntry !== '.' && $eachEntry !== '..') {
+        if($eachEntry !== '.' && $eachEntry !== '..' && $eachEntry !== '.DS_Store') {
           $categoryList[] = $eachEntry;
         }
       }
+
       closedir($dh);
       return $categoryList;
     } else {
@@ -42,7 +43,9 @@ class Corpus_Kentei {
       $filePathList = array();
 
       while(($eachEntry = readdir($dh)) !== false) {
-        if($eachEntry !== '.' && $eachEntry !== '..') {
+        var_dump($eachEntry);
+
+        if($eachEntry !== '.' && $eachEntry !== '..' && $eachEntry !== '.DS_Store') {
           $filePathList[] = sprintf('%s/%s', $category_dir, $eachEntry);
         }
       }
