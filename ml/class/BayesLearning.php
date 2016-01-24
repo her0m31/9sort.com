@@ -1,6 +1,6 @@
 <?php
 /*「けんてーごっこ」コーパス用のベイジアンフィルタクラス 機械学習処理機能 判定機能を持つ */
-class BayesLearning_Kentei {
+class BayesLearning {
   /* @var object Corpus_Kentei クラスから生成したオブジェクト */
   var $ckentei = null;
   /* @var object Morpheme クラスから生成したオブジェクト */
@@ -25,7 +25,7 @@ class BayesLearning_Kentei {
   */
   public function __construct() {
     /* Corpus_Kentei クラスから生成したオブジェクト */
-    $this->ckentei = new Corpus_Kentei();
+    $this->ckentei = new Corpus();
 
     /* Morpheme クラスから生成したオブジェクト */
     $this->m = new Morpheme();

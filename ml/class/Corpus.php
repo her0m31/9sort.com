@@ -43,8 +43,6 @@ class Corpus {
       $filePathList = array();
 
       while(($eachEntry = readdir($dh)) !== false) {
-        var_dump($eachEntry);
-
         if($eachEntry !== '.' && $eachEntry !== '..' && $eachEntry !== '.DS_Store') {
           $filePathList[] = sprintf('%s/%s', $category_dir, $eachEntry);
         }
