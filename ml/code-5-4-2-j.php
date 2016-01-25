@@ -1,18 +1,18 @@
 <?php
 /* 文書の判定用スコアを計算する */
 
-/* Corpus_Kentei クラスを読み込む */
-require_once('class/Corpus_Kentei.php');
+/* Corpus クラスを読み込む */
+require_once('class/Corpus.php');
 /* Morpheme クラスを読み込む */
 require_once('class/Morpheme.php');
-/* BayesLearning_Kentei クラスを読み込む */
-require_once('class/BayesLearning_Kentei.php');
-/* @var object BayesLearning_Kentei クラスから生成したオブジェクト */
-$bayesKentei = new BayesLearning_Kentei();
+/* BayesLearning クラスを読み込む */
+require_once('class/BayesLearning.php');
+/* @var object BayesLearning クラスから生成したオブジェクト */
+$bayesKentei = new BayesLearning();
 /* MySQLに接続するためのパスワードを記入すること */
 $bayesKentei->pdoPassword = 'root';
-/* @var object Corpus_Kentei クラスから生成したオブジェクト */
-$ckentei = new Corpus_Kentei();
+/* @var object Corpus クラスから生成したオブジェクト */
+$ckentei = new Corpus();
 
 if(is_object($ckentei)) {
   if(is_object($bayesKentei)) {
@@ -137,11 +137,11 @@ if(is_object($ckentei)) {
       printf("\n\n");
     }
   } else {
-    printf("BayesLearning_Kentei オブジェクトを作成できません。処理を中断します。\n");
+    printf("BayesLearning オブジェクトを作成できません。処理を中断します。\n");
     exit();
   }
 } else {
-  printf("Corpus_Kentei オブジェクトを作成できません。処理を中断します。\n");
+  printf("Corpus オブジェクトを作成できません。処理を中断します。\n");
   exit();
 }
 ?>
