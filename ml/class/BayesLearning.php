@@ -1,10 +1,10 @@
 <?php
-/*「けんてーごっこ」コーパス用のベイジアンフィルタクラス 機械学習処理機能 判定機能を持つ */
+/* ベイジアンフィルタクラス 機械学習処理機能 判定機能を持つ */
 class BayesLearning {
-  /* @var object Corpus_Kentei クラスから生成したオブジェクト */
-  var $ckentei = null;
+  /* @var object Corpus クラスから生成したオブジェクト */
+  var $courpus = null;
   /* @var object Morpheme クラスから生成したオブジェクト */
-  var $m = null;
+  var $morpheme = null;
   /* @var object PDO拡張モジュールのオブジェクト */
   var $dbh = null;
   /* @var string MySQLに接続するためのDSN */
@@ -23,12 +23,12 @@ class BayesLearning {
   * @param void
   * @return this
   */
-  public function __construct() {
-    /* Corpus_Kentei クラスから生成したオブジェクト */
-    $this->ckentei = new Corpus();
+  public function constructer() {
+    /* Corpusクラスから生成したオブジェクト */
+    $this->courpus = new Corpus();
 
     /* Morpheme クラスから生成したオブジェクト */
-    $this->m = new Morpheme();
+    $this->morpheme = new Morpheme();
     return $this;
   }
 
@@ -44,13 +44,13 @@ class BayesLearning {
     }
   }
 
-  /** 「けんてーごっこ」コーパスのカテゴリを指定し、フィルタの識別名を返す
+  /** コーパスのカテゴリを指定し、フィルタの識別名を返す
   * @param string category 機械学習するカテゴリ
   * @return string フィルタの識別名
   */
   function getFilterName($category) {
     if(strlen($category) > 0) {
-      return sprintf('Kentei:%s', $category);
+      return sprintf('%s', $category);
     } else {
       return null;
     }
@@ -61,12 +61,12 @@ class BayesLearning {
   * @return boolean true:正常終了 false:異常発生
   */
   function registerFilters() {
-    if(is_object($this->ckentei)) {
+    if(is_object($this->courpus)) {
       /* データベースに接続する */
       $this->connectDB();
 
       /* 訓練用コーパスのカテゴリ一覧 */
-      $categoryList = $this->ckentei->getTrainingCategoryList();
+      $categoryList = $this->courpus->getTrainingCategoryList();
 
       foreach($categoryList as $eachCategory) {
         /* 各フィルタの識別名 */
@@ -95,12 +95,12 @@ class BayesLearning {
 
       return true;
     } else {
-      /* $this->ckentei が初期化されていない場合 */
+      /* $this->courpus が初期化されていない場合 */
       return false;
     }
   }
 
-  /** 「20 News Groups」コーパスのカテゴリを指定し、対応するフィルタIDを返す
+  /** コーパスのカテゴリを指定し、対応するフィルタIDを返す
   * @param string category 機械学習するカテゴリ
   * @return int フィルタID
   */
@@ -131,7 +131,7 @@ class BayesLearning {
     }
   }
 
-  /** 「20 News Groups」コーパスのカテゴリを指定し、対応するフィルタを返す
+  /** コーパスのカテゴリを指定し、対応するフィルタを返す
   * @param string category 機械学習するカテゴリ
   * @return array フィルタの基本情報
   */
@@ -163,7 +163,7 @@ class BayesLearning {
     }
   }
 
-  /**「けんてーごっこ」コーパスのカテゴリを指定し、分類したいカテゴリのコーパスを機械学習する。
+  /** コーパスのカテゴリを指定し、分類したいカテゴリのコーパスを機械学習する。
   * @param string category 機械学習するカテゴリ
   * @return boolean true:正常終了 false:異常発生
   */
@@ -171,15 +171,15 @@ class BayesLearning {
     $filterId = $this->getFilterIDByCategory($category);
     if(is_numeric($filterId)) {
       /* 分類したいカテゴリに含まれるコーパスファイルの一覧を取得する */
-      $fileList = $this->ckentei->getTrainingCorpusList($category);
+      $fileList = $this->courpus->getTrainingCorpusList($category);
 
       /* 単語の出現回数を記録する */
       $wordCountMap = array();
 
       foreach($fileList as $eachFile) {
         /* 形態素解析結果 */
-        $corpusBody = $this->ckentei->getTrainingContent($eachFile);
-        $eachMorphemeResult = $this->m->parseJapanese($corpusBody);
+        $corpusBody = $this->courpus->getTrainingContent($eachFile);
+        $eachMorphemeResult = $this->morpheme->parseJapanese($corpusBody);
 
         /* コーパスに含まれる単語の一覧を記録する連想配列 */
         $eachWordList = array();
@@ -201,7 +201,7 @@ class BayesLearning {
       /* 各単語の出現回数を書き込んでゆく */
       foreach($wordCountMap as $eachWord => $eachWordCount) {
         /* 既に登録済みの単語かどうか判定する。 */
-        $checkSql = sprintf( 'SELECT COUNT(*) AS FLAG_EXISTS FROM t_word_count WHERE filter_id=%d AND corpus_type=0 AND word="%s"', $filterId, $eachWord);
+        $checkSql = sprintf('SELECT COUNT(*) AS FLAG_EXISTS FROM t_word_count WHERE filter_id=%d AND corpus_type=0 AND word="%s"', $filterId, $eachWord);
         $sth = $this->dbh->prepare( $checkSql );
         $sth->execute();
 
@@ -230,7 +230,7 @@ class BayesLearning {
     }
   }
 
-  /**「けんてーごっこ」コーパスのカテゴリを指定し、分類したいカテゴリ以外のコーパスを機械学習する。
+  /** コーパスのカテゴリを指定し、分類したいカテゴリ以外のコーパスを機械学習する。
   * @param string category 機械学習するカテゴリ
   * @return boolean true:正常終了 false:異常発生
   */
@@ -238,7 +238,7 @@ class BayesLearning {
     $filterId = $this->getFilterIDByCategory($category);
     if(is_numeric($filterId)) {
       /* 訓練用コーパスのカテゴリ一覧 */
-      $categoryList = $this->ckentei->getTrainingCategoryList();
+      $categoryList = $this->courpus->getTrainingCategoryList();
 
       foreach($categoryList as $eachExcludeCategory) {
         /* $category 以外のカテゴリであることを確かめる */
@@ -246,15 +246,15 @@ class BayesLearning {
           printf("分類したいカテゴリ以外のコーパスの学習: %s\n", $eachExcludeCategory);
 
           /* 分類したいカテゴリ以外に含まれるコーパスファイルの一覧を取得する */
-          $excludeFileList = $this->ckentei->getTrainingCorpusList($eachExcludeCategory);
+          $excludeFileList = $this->courpus->getTrainingCorpusList($eachExcludeCategory);
 
           /* 単語の出現回数を記録する */
           $wordCountMap = array();
 
           foreach($excludeFileList as $eachFile) {
             /* 形態素解析結果 */
-            $corpusBody = $this->ckentei->getTrainingContent($eachFile);
-            $eachMorphemeResult = $this->m->parseJapanese($corpusBody);
+            $corpusBody = $this->courpus->getTrainingContent($eachFile);
+            $eachMorphemeResult = $this->morpheme->parseJapanese($corpusBody);
 
             /* コーパスに含まれる単語の一覧を記録する連想配列 */
             $eachWordList = array();
@@ -295,7 +295,7 @@ class BayesLearning {
           }
 
           /* 分類すべきカテゴリ以外に属するコーパス数を加算する。 */
-          $updateSql = sprintf( 'UPDATE m_filter SET exclude_corpus_size=exclude_corpus_size+%d , last_learned_datetime=NOW() WHERE id=%d', sizeof($excludeFileList), $filterId);
+          $updateSql = sprintf('UPDATE m_filter SET exclude_corpus_size=exclude_corpus_size+%d , last_learned_datetime=NOW() WHERE id=%d', sizeof($excludeFileList), $filterId);
           $sth = $this->dbh->prepare($updateSql);
           $sth->execute();
         }
@@ -307,7 +307,7 @@ class BayesLearning {
     }
   }
 
-  /** 「20 News Groups」コーパスのカテゴリを指定し、機械学習処理を実行する。
+  /** コーパスのカテゴリを指定し、機械学習処理を実行する。
   * @param string category 機械学習するカテゴリ
   * @return boolean true:正常終了 false:異常発生
   */
@@ -437,7 +437,7 @@ class BayesLearning {
   function culcDocumentScore($text, $range = 15, $flag_debug = false) {
     if(strlen($text) > 0) {
       /* 形態素解析結果 */
-      $eachMorphemeResult = $this->m->parseJapanese($text);
+      $eachMorphemeResult = $this->morpheme->parseJapanese($text);
 
       /* 各単語のスコアを記録する配列 */
       $wordScoreMap = array();
