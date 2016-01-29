@@ -1,0 +1,167 @@
+CActiveRecord::scopes() でわかる、SQL上級者のためのO/Rマッピング
+このエントリは最終的に SQL上級者こそ知って欲しい、なぜO/Rマッパーが重要か？ をYiiの機能で理解するのが目的です。タイトルはネタです。
+最初にYiiを使って何か作るとき、おそらく一番最初に目にするのはこんなコードですよね。
+EntryController.php
+<?php
+class EntryController extends Controller
+{
+    public function actionIndex()
+    {
+        $dataProvider=new CActiveDataProvider('Entry');
+        $this->render('index',array(
+            'dataProvider'=>$dataProvider,
+        ));
+    }
+r=entry/index というルートに対応するコントローラのハンドラ。記事一覧みたいなのを出すアクションです。これ、このあとだいたい、日付の降順にソートしたいとかなるわけですが、みなさんどうしてますか。
+CActiveDataProvider はYiiのコンポーネントなので、コンストラクタでいろいろプロパティを初期化できますよね。マニュアルを見ると、クライテリアを指定できるみたいです。これ使うとなんだか ORDER BY できそうです。
+http://www.yiiframework.com/doc/api/1.1/CActiveDataProvider#criteria-detail
+で、なんも考えずにそのまま書いちゃうとこんな感じ。
+EntryController.php
+<?php
+class EntryController extends Controller
+{
+    public function actionIndex()
+    {
+        $dataProvider=new CActiveDataProvider('Entry', array(
+            'criteria'=>array(
+                'order'=>'posted_date DESC',
+            ),
+        ));
+        $this->render('index',array(
+            'dataProvider'=>$dataProvider,
+        ));
+    }
+コントローラにSQLが漏れとるやないかい!
+たしかに CActiveDataProvider はそれ自体にクライテリアを持ちますが、コントローラやビューで使うときは、できるだけ表面的な表示に関わることぐらいにしておきましょう。
+こういうのは、まずモデルのほうに移動して、こうするべきですね。
+Entry.php
+<?php
+class Entry extends CActiveRecord
+{
+    public function getNewerFirstProvider()
+    {
+        return new CActiveDataProvider(__CLASS__, array(
+            'criteria'=>array(
+                'order'=>'posted_date DESC',
+            ),
+        ));
+    }
+EntryController.php
+<?php
+class EntryController extends Controller
+{
+    public function actionIndex()
+    {
+        $dataProvider=Entry::model()->newerFirstProvider;
+        $this->render('index',array(
+            'dataProvider'=>$dataProvider,
+        ));
+    }
+Giiが生成する search() と actionAdmin() っぽくなりました。全部あの調子で書くのはちょっとたいへん。
+そこでマニュアルを確認。 CActiveDataProvider にはクライテリアを指定できるのですが、実はなんと、CActiveRecord 自体にも、find() 系のメソッドに自動的に挿入される、事前フィルタ用のクライテリアがあります。
+http://www.yiiframework.com/doc/api/1.1/CActiveRecord#dbCriteria-detail
+これ、いろいろと事前処理で蓄積されて、で、最終的に後で指定されるクライテリアと結合されます。もしかして、これを活かせれば、 表示のための CActiveDataProvider のクライテリア と、 「日付で降順ソートしたい」という機能要件のためのSQL を分離できるんじゃ?
+うまくやると、さっきのはもっと短く明解になります。
+Entry.php
+<?php
+class Entry extends CActiveRecord
+{
+    public function newestFirst()
+    {
+        $this->dbCriteria->order = 'posted_date DESC';
+        return $this;
+    }
+EntryController.php
+<?php
+class EntryController extends Controller
+{
+    public function actionIndex()
+    {
+        $model=Entry::model()->newestFirst();
+        $dataProvider=new CActiveDataProvider($model);
+        $this->render('index',array(
+            'dataProvider'=>$dataProvider,
+        ));
+    }
+モデルの「日付降順ソート版」が得られました。
+CActiveDataProvider はモデルクラス名の他にモデル自体 (モデルのインスタンスじゃなくて Hoge::model() 形式のあのアクセスインターフェースでOK) を取ることができるのです。で、newestFirst() でクライテリアを限定してやると、あとで CActiveDataProvider がミックスしたSQL(この場合はPagination用のLIMITを混ぜる)を作ってくれます。
+ただ… dbCriteria の直接操作って、ちょっとレイヤーが違う感じがしますよね。モデルといってもビジネスロジックなんだから、もうちょっと抽象的にできるものならやりたい。
+そこで登場、CActiveRecord::scopes() です。
+http://www.yiiframework.com/doc/api/1.1/CActiveRecord#scopes-detail
+scopes() は relations() や rules() と同じ形式の、宣言的なメソッドです。こいつがやるのは、ちょうど、RDBMSのビューの限定版みたいなことです。これを使うと、問い合わせのとき、「全データ」から dbCriteria を限定してできる「なになに版」を得るためのメソッドをモデルに追加することができます。
+Entry.php
+<?php
+class Entry extends CActiveRecord
+{
+    public function scopes()
+    {
+        return array(
+            'newestFirst'=>array(
+                'order'=>'posted_date DESC',
+            ),
+            'newestLast'=>array(
+                'order'=>'posted_date ASC',
+            ),
+            'onlyUnread'=>array(
+                'condition'=>array('read', 0),
+            ),
+        );
+    }
+はい、これでさっきの newestFirst メソッドほかもろもろが追加できました。すでに同じ名前のメソッドが定義されているとダメなので、最初の newestFirst の定義は消します。
+コントローラは同じでOKです。同名のメソッドが拡張されてるんだもの。
+EntryController.php
+<?php
+class EntryController extends Controller
+{
+    public function actionIndex()
+    {
+        $model=Entry::model()->newestFirst();
+        $dataProvider=new CActiveDataProvider($model);
+        $this->render('index',array(
+            'dataProvider'=>$dataProvider,
+        ));
+    }
+しかも、クライテリアの積み重ねができるので、こんなことも可能。
+EntryController.php
+<?php
+class EntryController extends Controller
+{
+    public function actionUnreads()
+    {
+        // スコープの重ねあわせ
+        $model=Entry::model()->onlyUnread()->newestLast();
+        $dataProvider=new CActiveDataProvider($model);
+        $this->render('unreads',array(
+            'dataProvider'=>$dataProvider,
+        ));
+    }
+「未読記事だけを日付の昇順でソート」も、サクッとできました。しかも可読性がとてもいい。
+(本当は、未読っていうと、ユーザとのMANY_MANY関係なんですが、まあここは擬似コードということで許してください)
+Yiiのこの、段階ごとのクライテリアまぜまぜについて、そのメリットとは…ということで、あのスライドの再登場です。
+SQL上級者こそ知って欲しい、なぜO/Rマッパーが重要か？
+ORMを使うことで、
+SQLを小さい部品に分解
+部品からSQL全体を構築
+部品に名前をつけて抽象化できるようになる！
+ということですね。
+生のSQLに近いORMを持ったYiiだけど、それをクライテリアとして抽象化している動機はまさにこれです。SQLで考えるけど、それを部品に分けて使えるということの大事さ。
+ちなみに、Entry::model() と、何も指定しなかったときにすでに適用されているフィルタが欲しい場合は、defaultScope() で指定しておけます。
+Entry.php
+<?php
+class Entry extends CActiveRecord
+{
+    public function defaultScope()
+    {
+        return array(
+            'condition'=>'trashed = 0',
+        );
+    }
+こうすると、何もしていなくても trashed フラグが立っていない、つまり意味としては「ゴミ箱にない」エントリのみに限定されます。
+このデフォルトを解除するため(というかすべてのスコープ蓄積を解除するため)のスコープ指定は、resetScope() です。
+PHP
+<?php
+$model = Entry::model()->resetScope()->newestLast();
+こんな感じ。
+あとさらに、1.1.9から、relations() のオプションにも scopes 項目が追加されていて、任意のスコープ名でフィルタをかけて取ってくることができるようになっています。これ、リレーション相手モデルを取得するときの condition と order を参照元のモデル実装に書かなくてもいいので、モデル間で意味の結合をゆるくできるんじゃないかと思います。
+http://www.yiiframework.com/doc/api/1.1/CActiveRecord#relations-detail
+YiiのDBまわりは、SQLを部品に分けるというORMの意義を理解したSQL使いにとって、とても都合がいいAPIになっていると思います。これから自分もじゃんじゃんスコープを活用していこうと思います。

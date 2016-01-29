@@ -1,0 +1,37 @@
+LearnOSM -中上級者編
+このページは、LearnOSMの、English Learning Guidesの翻訳ファルを置いています。
+問い合わせたところライセンスはCC0とのことでしたが、もし問題があればご連絡ください。
+I've heard they are licensed under CC0. If there are some problem, contact me.
+中級編
+
+より詳細な編集
+JOSM資料 - Tom_G3X Slideshare
+JOSM Manual - Kubota@OSMFJ PDF
+Conflict Resolution - 競合発生時の解決
+Using Orbview Imagery in JOSM - JOSMにおけるOrbview画像利用
+Quality Assurance - 品質管理
+Tasking Manager - HOTタスクマネージャ
+Editing the Wiki - OSM WIkiの編集
+Creating Custom Presets - プリセット自作手順
+Private Data Store - HOTプライベートデータストア
+上級編
+
+PostGIS Configuration - PostGIS基礎設定
+TileMillによる地図デザイン
+Putting Maps on a Website - Webサイトでの地図表示
+Github Sharing - Githubによるデータ共有
+WMS Service Configuration - WMSサービス設定
+Private Data Storage Configuration - プライベートデータストア設定
+Projections and File Types - 地理情報ファイル形式と投影法
+SQLite Databases - SQLite データベース
+Virtual Machine Setup - 仮想マシンのセットアップ
+QGIS
+
+The Basics of QGIS - QGIS基礎
+Managing Your Data - QGISによるデータ管理
+Adding Labels to Maps - 地図上へのラベル表示追加
+Adding Style to Maps - 地図へのスタイル設定
+Printing Maps - 地図の印刷
+Attaching Photos to Maps - 地図への写真データ追加
+Useful Plugins - 各種プラグイン紹介
+[Inasafe] Need to introduce Inasafe and link it to the main website. - Inasafe機能解説
