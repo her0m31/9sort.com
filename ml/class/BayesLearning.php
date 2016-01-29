@@ -23,7 +23,7 @@ class BayesLearning {
   * @param void
   * @return this
   */
-  public function constructer() {
+  public function __construct() {
     /* Corpusクラスから生成したオブジェクト */
     $this->courpus = new Corpus();
 
@@ -169,6 +169,7 @@ class BayesLearning {
   */
   function learnTargetCategory($category) {
     $filterId = $this->getFilterIDByCategory($category);
+
     if(is_numeric($filterId)) {
       /* 分類したいカテゴリに含まれるコーパスファイルの一覧を取得する */
       $fileList = $this->courpus->getTrainingCorpusList($category);
