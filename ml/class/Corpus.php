@@ -12,7 +12,8 @@ class Corpus {
   * @return array カテゴリリスト
   */
   function getCategoryList($base_dir) {
-    $dh = @opendir($base_dir);
+    $dh = opendir($base_dir);
+    var_dump($base_dir);
     if(is_resource($dh)) {
       /* @var array カテゴリリスト */
       $categoryList = array();
