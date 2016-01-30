@@ -1,0 +1,137 @@
+【Rails初心者必見！】ひたすら丁寧にデータ取得を説明(find, where)
+Railsをとりあえず学び始めたという方が、とりあえずよくわからず使っても動くけど、結局理解があいまいになりがちなのがこのデータの取得部分だと思います。
+データを取得しないアプリは無いと言っても過言ではないと思うので、しっかり理解しておきましょう。
+今回はここをひたすら初心者目線で丁寧に解説したいと思います！
+（わかりにくいところがあったら是非遠慮なくコメントくださいm(_ _)m）
+データを1つだけ取得する
+
+特定のIDのデータを取得したい
+
+使用例：IDがわかっているデータをあるモデルから取得したい時
+よくある利用ケース：RailsのshowアクションであるIDのデータを取得
+複数条件：不可
+class ArticlesController < ApplicationController
+
+  def show
+    @article = Article.find(params[:id])
+  end
+end
+
+# URLは例えば http://localhost:3000/articles/1
+findは指定したモデルのインスタンス（すぐに利用できるデータ）を返すので、例えば「@article.title」のように使えます。取得したデータがインスタンスかどうかというのは非常に重要なので頭に入れておいてください。
+特定のカラムの値から1つのデータを取得したい
+
+使用例：ID以外のカラムデータから1つのデータを取得したい時
+よくある利用ケース：Emailからユーザーを取得したい時
+複数条件：可
+class UsersController < ApplicationController
+
+  def edit
+    @user = User.find_by(email: params[:email])
+  end
+end
+
+
+# URLは例えば http://localhost:3000/articles/1/edit
+find_byも 指定したモデルのインスタンス（すぐに利用できるデータ）を返しますので、「@user.email」などの使い方ができます。
+また、下記のように複数条件の指定も可能です。
+@user = User.find_by(email: params[:email], name: '田中太郎')
+実は別にidを指定することも可能ですし、使われることもしばしばありますが、少し挙動に違いがあります。これについては後で説明します。
+ある条件にあてはまるものの最初の1つを取得する
+
+使用例：ある条件下のリストを取得してそのうち一番初めのものを取得したい時
+よくある利用ケース：新着記事などでとりあえず最初のものを見せたい時
+複数条件：可
+class HomeController < ApplicationController
+
+  def index
+    Article.where('created_at > ?', 1.day.ago).first
+  end
+end
+ちょっと利用ケースが適切で無いかもしれません。。（思いつかなかった、、）
+ここで重要なのは whereメソッドを使った場合、指定したモデルのインスタンスではないのでそのままデータを利用できないということです。
+whereは範囲を絞っただけなので、その範囲の中のどれを使うかを指定する必要があります。今回はfirstメソッドを後ろにつけて、絞った中の一番はじめのものを取得しています。
+よく初心者の方が間違えるのが
+class HomeController < ApplicationController
+
+  def index
+    @article = Article.where(id: 1)
+  end
+end
+
+# 以下はViewの中でのお話
+<h1><%= @article.title %></h1>
+こういうことはできません。これは私の経験上、初心者によくあるかなと思っています。whereで取得できるものが最初から1つだとわかっていたりした場合に、そのまま使えると勘違いしてしまうのですね。あくまで whereは範囲を絞っただけと覚えるようにしておいてください。
+複数データの取得
+
+ある条件にあてはまるものを複数取得
+
+使用例：全データをリストで表示したい時
+よくある利用ケース：indexアクションでモデルのデータをリスト的に表示したい時
+class ArticlesController < ApplicationController
+
+  def index
+    # 有効な全記事を取得してきています
+    @articles = Article.where(active: true)
+  end
+end
+この場合も先ほどあったように、whereは範囲を絞っただけなのでどれを使うか指定してあげなければいけません。そこで、ここでよく使うのがeachですね。例えばViewは下記の感じです。
+# app/views/articles/index.html.erb
+
+<% @articles.each do |article| %>
+  <ul>
+    <il>タイトル：<%= article.title %></li>
+    <il>内容：<%= article.content %></li>
+    <il>投稿日：<%= article.created_at %></li>
+  </ul>
+<% end %>
+ここで重要なのは、 eachで回っている時（ブロック変数のarticleにデータが入る時）には、Articleのインスタンスになっているということです。これによって、もともとはwhereで範囲を絞っただけのものだったのに、「article.title」などというように利用できるわけです。
+補足 (findとfind_byの違い)
+
+先ほど上で少し書きましたが、find_byでもfind_by(id: 1)のような使い方はできます。では何が違うかというと
+# 前提：Userはidが1のものしか存在しない
+
+# これは完全に同じ
+@user = User.find(1)
+@user = User.find_by(id: 1)
+
+# ココがポイント！
+@user = User.find(2)
+#=> ActiveRecord::RecordNotFound: Couldn't find User with 'id'=2
+
+@user = User.find_by(id: 2)
+#=> nil
+わかりましたか？？findメソッドは、もしデータが無かった場合、エラーになります。よくraiseするとか言われますね。なので、確実にデータを取得できる場合に使いましょう。逆にfind_byはデータが無くてもnilを返してくれます。
+なので、例えば
+if User.find_by(id: 2)
+  @user_existance = true
+else
+  @user_existance = false
+end
+こういうことができます。
+まとめ
+
+いろいろあって難しいかもしれませんが、私の結論としては
+取得したいデータの数	使用メソッド
+1つ（idがわかっている）	find
+1つ（idがわからない）	find_by
+複数	where
+最初のうちはこの理解で十分ではないかと思います。
+おまけ（初心者の方におすすめの勉強方法）
+
+書籍
+
+たのしいRuby
+
+アフィリエイトじゃないですよ笑　
+私自身、Rubyはこれで学びました。解説がわかりやすく、進めて行きやすいです。ですが、例えば数値の型まわりなど、初心者のうちはそれほど必要ない部分もけっこうあるので、さらっと全体をなめてからよく使いそうな場所を重点的に勉強していくのが良いのではないかなと思います。
+オンライン学習
+
+Progate
+
+動画学習のサービスの中では非常にわかりやすいと思います。英語がわかるかたはCodeAcademyとかもいいかもしれません。
+アプリ学習
+
+Pocket Programming
+
+初心者が混乱しないように、本当に必要な部分に特化した問題を解いて知識を定着できます。スマホアプリなので、電車の中やテレビ見ながら、あるいはリラックスタイムなどに、上記の書籍やオンライン学習の理解をチェックしてみるのもいいですね。

@@ -1,0 +1,872 @@
+[初心者向け] RubyやRailsでリファクタリングに使えそうなイディオムとか便利メソッドとか
+はじめに: 遠回りせずに「近道」を探す
+
+RubyやRailsを始めたばかりの人は、もっと短く書く方法や便利な標準ライブラリの存在を知らずに遠回りした書き方をしてしまいがちです。
+そこで、RubyやRails初心者の人によく見かける「遠回り(または車輪の再発明)」と、それを回避する「近道」をいろいろ集めてみました。
+2013.11.06 追記
+
+この投稿を書くに至った経緯などを自分のブログに書きました。
+こちらも合わせてどうぞ！
+昨日Qiitaに投稿した記事は普段のコードレビューの副産物 - give IT a try
+Ruby編
+
+以下はRubyの標準機能を使ったイディオムやメソッドです。
+Railsプロジェクトでもそれ以外でも使えます。(Ruby 1.9以上を想定)
+後置ifで行数を減らす
+
+if user.active?
+  send_mail_to(user)
+end
+send_mail_to(user) if user.active?
+if + notではなく、unlessを使う
+
+user.destroy if !user.active?
+user.destroy unless user.active?
+ただし、unlessの条件がandやorでつながっていたり、否定形の条件が入っていたりすると、読み手の脳に負担がかかるので、複雑な条件はifを使う方が良いです。
+# こんなunlessは理解するのに時間がかかるのでNG
+user.destroy unless (user.active? || user.admin?) && !user.spam?
+三項演算子を使って行数を減らす
+
+if user.admin?
+  "I appreciate for that."
+else
+  "Thanks."
+end
+user.admin? ? "I appreciate for that." : "Thanks"
+ただし、三項演算子をネストさせたりすると極めて読みにくくなるのでやめておきましょう。
+# 三項演算子のネストは読みづらい
+user.admin? ? user.active? ? "I appreciate for that." : "Are you OK?" : "Thanks."
+代入してからifで存在を確認、をまとめて書く
+
+user = find_user
+if user
+  send_mail_to(user)
+end
+if user = find_user
+  send_mail_to(user)
+end
+ただし、このイディオムは「==と=を書き間違えたんじゃないか？」と読み手に勘違いされる恐れもあるので、好き嫌いが分かれるのも事実です。
+子どものオブジェクトが存在する場合にのみ、そのプロパティやメソッドを呼び出して条件を確認する、をひとつのifで書く
+
+以下のコードは、parent.childrenがnilになっている可能性があるので、childrenが存在するときだけchildren.singleton?を呼び出したい、というようなケースです。
+if parent.children
+  if parent.children.singleton?
+    singleton = parent.children.first
+    send_mail_to(singleton)
+  end
+end
+if parent.children && parent.children.singleton?
+  singleton = parent.children.first
+  send_mail_to(singleton)
+end
+Ruby 2.3では safe navigation operator という新しい演算子（&.）が追加されました。
+これを使うと nil かもしれないオブジェクトにメソッド呼び出しを試すことができます。
+もしオブジェクトが nil であれば戻り値も nil になります。
+# Ruby 2.3以降（childrenがnilでもエラーにならず、nilが返る）
+if parent.children&.singleton?
+  singleton = parent.children.first
+  send_mail_to(singleton)
+end
+その他、Ruby 2.3の新機能についてはこちらの記事をご覧ください。
+サンプルコードでわかる！Ruby 2.3の主な新機能 - Qiita
+メソッドの戻り値を返すときにreturnを使わない
+
+他の言語からやってきた人はついついreturnを使いたくなりますが、returnを使わない書き方の方がRubyっぽいです。
+def build_message(user)
+  message = 'hello'
+  message += '!!' if user.admin?
+  return message
+end
+def build_message(user)
+  message = 'hello'
+  message += '!!' if user.admin?
+  message
+end
+「初期化、プロパティセット、戻り値として返す」の代わりにObject#tapを使う
+
+tapを使わなくても行数は同じですが、ローカル変数の宣言や値を返却するためだけに書く最後の行がいらなくなります。
+def build_user
+  user = User.new
+  user.email = "hoge@hoge.com"
+  user.name = "Taro Yamada"
+  user
+end
+def build_user
+  User.new.tap do |user|
+    user.email = "hoge@hoge.com"
+    user.name = "Taro Yamada"
+  end
+end
+"+”ではなく"#{ }"で文字列を連結する
+
+"Hello, " + user.name + "!"
+"Hello, #{user.name}!"
+定数はfreezeさせる
+
+文字列であれ、配列であれ、ハッシュであれ、定数宣言した値はfreezeしておく方が無難です。万一変更されると困るので。
+文字列の場合
+
+CONTACT_PHONE_NUMBER = "03-1234-5678"
+CONTACT_PHONE_NUMBER << "@#$%^"
+puts CONTACT_PHONE_NUMBER # => 03-1234-5678@#$%^
+CONTACT_PHONE_NUMBER = "03-1234-5678".freeze
+CONTACT_PHONE_NUMBER << "@#$%^" # => RuntimeError: can't modify frozen String
+配列の場合
+
+ADMIN_NAMES = ["Tom", "Alice"]
+ADMIN_NAMES << "Taro"
+puts ADMIN_NAMES # => ["Tom", "Alice", "Taro"]
+ADMIN_NAMES = ["Tom", "Alice"].freeze
+ADMIN_NAMES << "Taro" # => RuntimeError: can't modify frozen Array
+整数の場合
+
+整数(FixNum)は変更不能なのでfreezeしなくても問題ありません。
+# エラーにはならないが、あまり意味が無い
+ITEM_LIMIT = 500.freeze
+配列を作るとき、[ ]の代わりに%w( )、%i( )を使う
+
+文字列だけの配列を作りたい場合は%w( )を使うと少し短く書けます。
+actions = ['index', 'new', 'create']
+actions = %w(index new create) # => ['index', 'new', 'create']
+Ruby 2.0なら%i( )でシンボルの配列も作れます。
+actions = %i(index new create) # => [:index, :new, :create]
+配列を順番に処理するとき、"object.method"の代わりに"&:method"を使う
+
+names = users.map{|user| user.name }
+names = users.map(&:name)
+mapに限らず、eachやselectなどブロックで配列の中身を受け取るようなメソッドは同じように&:methodで処理できます。
+nilか配列かを区別せず、Array( )で処理してしまう
+
+基本的に配列だが、nilが渡される場合もある変数を処理する場合、Array()（Kernel#Array）を使うと条件分岐を無くせます。
+# usersはnilが渡される場合もあるので分岐する
+if users
+  users.each{|user| send_direct_mail(user) }
+end
+# Array()を使うと、nilの場合は空の配列（[])が、それ以外は元の配列が返されるので分岐が不要
+Array(users).each{|user| send_direct_mail(user) }
+大きな数値を宣言する場合、"_"を入れて読みやすくする
+
+ITEM_LIMIT = 1000000000
+ITEM_LIMIT = 1_000_000_000
+単純なgetterメソッドを定義する代わりに、attr_readerを使う
+
+class Person
+  def initialize
+    @name = "No name"
+  end
+
+  def name
+    @name
+  end
+end
+class Person
+  attr_reader :name
+
+  def initialize
+    @name = "No name"
+  end
+
+  # いらない
+  # def name
+  #   @name
+  # end
+end
+要素の順番に意味がある配列は、同時に別々の変数で受け取る
+
+変数 = 配列のように書くと変数には配列が格納されますが、変数, 変数 = 配列のように書くと配列の各要素を別々の変数に格納できます。
+ans_array = 14.divmod(3)
+puts "商は#{ans_array[0]}"     # => 商は4
+puts "あまりは#{ans_array[1]}" # => あまりは2
+quotient, remainder = 14.divmod(3)
+puts "商は#{quotient}"      # => 商は4
+puts "あまりは#{remainder}" # => あまりは2
+ハッシュをeachで回したときに、ブロックが受け取る引数も同じですね。
+# keyとvalueを配列として受け取る
+{name: 'Tom', email: 'hoge@hoge.com'}.each do |key_and_value|
+  puts "key: #{key_and_value[0]}"
+  puts "value: #{key_and_value[1]}"
+end
+# keyとvalueを別々の変数で受け取る
+{name: 'Tom', email: 'hoge@hoge.com'}.each do |key, value|
+  puts "key: #{key}"
+  puts "value: #{value}"
+end
+配列を連結するのに+ではなく、*(splat)を使う
+
+numbers = [1, 2, 3]
+numbers_with_zero_and_100 = [0] + numbers + [100] # => [0, 1, 2, 3, 100]
+numbers = [1, 2, 3]
+numbers_with_zero_and_100 = [0, *numbers, 100] # => [0, 1, 2, 3, 100]
+ちなみに*がないと、こうなります。(配列が展開されない)
+[0, numbers, 100] # => [0, [1, 2, 3], 100]
+nilだったら初期化、の代わりに ||= を使う
+
+いわゆる遅延初期化のイディオムですね。
+def twitter_client
+  @twitter_client = Twitter::REST::Client.new if @twitter_client.nil?
+  @twitter_client
+end
+def twitter_client
+  @twitter_client ||= Twitter::REST::Client.new
+end
+ハッシュのキーには文字列ではなくシンボルを使う
+
+ハッシュに値をセットする場合、キーには文字列よりもシンボルを使う方がベターです。
+# キーに文字列を使う
+currencies = { 'japan' => 'yen', 'america' => 'dollar', 'italy' => 'euro' }
+currencies['japan'] # => 'yen'
+# キーにシンボルを使う
+currencies = { japan: 'yen', america: 'dollar', italy: 'euro' }
+currencies[:japan] # => 'yen'
+シンボルを使うと以下のようなメリットがあります。
+{ key: value } のように簡潔なリテラルで書ける。
+文字列よりも速い。
+文字列よりもメモリの使用効率が良い。
+参考： Why use symbols as hash keys in Ruby? - Stack Overflow
+メソッド全体rescueの対象にするときはbegin/endを省く
+
+def process_user(user)
+  begin
+    send_to_mail(user)
+  rescue
+    # 例外処理
+  end
+end
+def process_user(user)
+  send_to_mail(user)
+rescue
+  # 例外処理
+end
+Exceptionをrescueするのではなく、StandardErrorをrescueする
+
+JavaやC#をやっていた人は「すべての例外を捕捉したい = Exceptionを捕捉する」と考えがちです。
+しかし、RubyでExceptionを捕捉すると、NoMemoryError等の致命的な例外も捕捉してしまいます。
+実行時エラーを表すRubyの例外クラスはExceptionのサブクラスであるStandardErrorです。
+rescueでデフォルトで捕捉するのはStandardErrorとそのサブクラスなので、すべての実行時エラーを捕捉したい場合はrescue節に具体的な例外クラス名を書く必要はありません。
+def process_user(user)
+  send_to_mail(user)
+rescue Exception => ex
+  # NoMemoryError等の致命的な例外まで捕捉してしまうので良くない
+end
+def process_user(user)
+  send_to_mail(user)
+rescue => ex
+  # すべての実行時エラー(＝ StandardErrorとそのサブクラス)が捕捉される
+end
+参考: http://qiita.com/jnchito/items/a6046733dd5683ff35b7
+一度rescueした例外をもう一度再raiseする
+
+「ある特定の例外クラス」だけでなく、「例外メッセージの中身」も確認して条件に合致すればrescue、そうでなければ対象外のエラーなのでそのままシステムエラーにしたい、というケースがたまにあります。
+その場合はrescue節の中でraiseを呼ぶと元のエラーを再raiseできます。
+def process_user(user)
+  send_to_mail(user)
+rescue ArgumentError => ex
+  if ex.message =~ /blah blah blah/
+    # ArgumentErrorかつ、メッセージも条件に合致すれば
+    # 別の処理を実行してそのまま続行する
+    send_to_admin(user, ex)
+  else
+    # メッセージが条件に合致しなかった場合は対処不能なエラーとして
+    # 元のエラーを再度raiseする
+    raise
+  end
+end
+size - 1ではなく、マイナスのインデックスで最後の文字や要素を指定する
+
+numbers = [1, 2, 3, 4, 5]
+name = 'Taro Yamada'
+
+numbers[numbers.size - 1] # => 5
+name[name.size - 1] # => 'a'
+
+numbers[1..numbers.size - 2] # => [2, 3, 4]
+name[1..name.size - 2] # => "aro Yamad"
+numbers = [1, 2, 3, 4, 5]
+name = 'Taro Yamada'
+
+numbers[-1] # => 5
+name[-1] # => 'a'
+
+numbers[1..-2] # => [2, 3, 4]
+name[1..-2] # => "aro Yamad"
+配列の便利なメソッドいろいろ
+
+find: 最初に見つかったものを返す
+
+def find_admin(users)
+  users.each do |user|
+    return user if user.admin?
+  end
+  nil
+end
+def find_admin(users)
+  users.find(&:admin?)
+end
+最初の見つかった要素のインデックスを返す場合はfind_index。
+select: 条件に合うものすべてを返す
+
+def find_admins(users)
+  admins = []
+  users.each do |user|
+    admins << user if user.admin?
+  end
+  admins
+end
+def find_admins(users)
+  users.select(&:admin?)
+end
+selectとは反対でfalseになる要素だけを集める場合はreject。
+count: 条件に合う要素の数を返す
+
+def count_admin(users)
+  count = 0
+  users.each do |user|
+    count += 1 if user.admin?
+  end
+  count
+end
+def count_admin(users)
+  users.count(&:admin?)
+end
+map: ある配列から別の配列を作る
+
+def user_names(users)
+  names = []
+  users.each do |user|
+    names << user.name
+  end
+  names
+end
+def user_names(users)
+  users.map(&:name)
+end
+flat_map: mapの結果をネストしないフラットな配列として受け取る
+
+nested_array = [[1, 2, 3], [4, 5, 6]]
+mapped_array = nested_array.map {|array| array.map {|n| n * 10 } }
+# => [[10, 20, 30], [40, 50, 60]]
+flat_array = mapped_array.flatten
+# => [10, 20, 30, 40, 50, 60]
+nested_array = [[1, 2, 3], [4, 5, 6]]
+flat_array = nested_array.flat_map {|array| array.map {|n| n * 10 } }
+# => [10, 20, 30, 40, 50, 60]
+compact: nil以外の要素を集める
+
+numbmers_and_nil = [1, 2, 3, nil, nil, 6]
+only_numbers = numbmers_and_nil.reject(&:nil?) # => [1, 2, 3, 6]
+numbers_and_nil = [1, 2, 3, nil, nil, 6]
+only_numbers = numbers_and_nil.compact # => [1, 2, 3, 6]
+any?: 最低でも1つ条件に合う要素があればtrueを返す
+
+def contains_nil?(users)
+  users.each do |user|
+    return true if user.nil?
+  end
+  false
+end
+def contains_nil?(users)
+  users.any?(&:nil?)
+end
+すべての要素が条件に合っている場合にtrueを返す場合はall?。
+empty?: 1件もなければtrueを返す
+
+puts "empty!" if users.size == 0
+puts "empty!" if users.empty?
+first/last: 最初と最後の要素を返す
+
+first_user = users[0]
+last_user = users[users.size - 1]
+first_user = users.first
+last_user = users.last
+sample: 任意の要素を返す
+
+users[rand(users.size)]
+users.sample
+each_with_index: eachでループしつつ、カウンタも同時に取得する
+
+counter = 0
+users.each do |user|
+  puts ", " if counter > 0
+  puts user.name
+  counter += 1
+end
+users.each_with_index |user, counter|
+  puts ", " if counter > 0
+  puts user.name
+end
+ループ処理系のメソッド + with_index: カウンタ付きで元のループ処理を実行する
+
+counter = 1
+users_with_index = users.map do |user|
+  [counter, user]
+  counter += 1
+end
+users_with_index = users.map.with_index do |user, counter|
+  [counter + 1, user]
+end
+with_indexはカウンタの初期値を指定できます。（デフォルトはゼロ）
+なので、上のコードは次のように書いても同じです。
+users_with_index = users.map.with_index(1) do |user, counter|
+  [counter, user]
+end
+join: 配列を1つの文字列として返す
+
+def numbers_text(numbers)
+  text = ''
+  numbers.each_with_index do |number, i|
+    text += ', ' if i > 0
+    text += number.to_s
+  end
+  text
+end
+def numbers_text(numbers)
+  numbers.join(', ') # [1, 2, 3] => "1, 2, 3"
+end
+max/max_by: 最大の要素を返す
+
+def oldest_user(users)
+  oldest = nil
+  users.each do |user|
+    oldest = user if oldest.nil? || user.age > oldest.age
+  end
+  oldet
+end
+def oldest_user(users)
+  users.max_by(&:age)
+end
+単純な数値や文字列の配列ならnumbers.maxだけでもOK。
+最小の要素を返す場合はminやmin_byを使う。
+each_with_object: ループを回しつつ、別のオブジェクトを組み立ててそれを返す
+
+def admin_names(users)
+  ret = []
+  users.each do |user|
+    ret << user.name if user.admin?
+  end
+  ret
+end
+def admin_names(users)
+  users.each_with_object([]) do |user, names|
+    names << user.name if user.admin?
+  end
+end
+まあ、上のサンプルのような場合はusers.select(&:admin?).map(&:name)って書けばいいんですけどね。
+その他の情報源
+
+全部挙げていくとキリがないので、配列を操作するロジックを書く前にまず、ArrayやEnumerableのAPIドキュメントを読んで「車輪の再発明」をしていないかチェックしてください。
+http://ruby-doc.org/core-2.0.0/Array.html
+http://ruby-doc.org/core-2.0.0/Enumerable.html
+英語の文法や品詞を意識する
+
+ケースバイケースで原則から外れる場合は十分ありえますが、文法や品詞の使いわけに明らかな逸脱(間違い)があると読み手が混乱します。
+配列の変数名や配列を返すメソッド名は原則複数形にする
+
+# number = [1, 2, 3]
+numbers = [1, 2, 3]
+# def find_even_number(numbers)
+#   numbers.select(&:even?)
+# end
+
+def find_even_numbers(numbers)
+  numbers.select(&:even?)
+end
+プロパティや変数名、クラス名は原則名詞や形容詞に、何かを操作するメソッドは原則動詞にする
+
+# reserve=予約する(動詞)、reserved=予約済みである(形容詞)
+
+# chair.reserve?
+chair.reserved? # => false
+
+# chair.reserved('Tom')
+chair.reserve('Tom')
+
+chair.reserved? # => true
+その他、英語の使い方については以下の記事も参考になると思うので、あわせて読んでみてください。
+モデルやメソッドに名前を付けるときは英語の品詞に気をつけよう
+Rails編
+
+以下はRails開発時にのみ使えるイディオムやメソッドです。
+標準のRubyでは用意されていないので使えません。
+ただし、大半のメソッドはActiveSupportのGemを導入することで使えるようになります。
+$ gem install active_support
+require 'active_support/all'
+
+nil.blank? # => true
+nilチェックの代わりにObject#try(:method_name)を使う
+
+if parent.children && parent.children.singleton?
+  singleton = parent.children.first
+  send_mail_to(singleton)
+end
+# childrenがnilならtry(:singleton?)はnilを返す
+# nilでなければ、children.singleton?が普通に呼ばれる
+if parent.children.try(:singleton?)
+  singleton = parent.children.first
+  send_mail_to(singleton)
+end
+「nil、もしくは空っぽい値」のチェックにblank?/present?を使う
+
+# String
+name = nil
+name.blank? # => true
+name = ""
+name.blank? # => true
+name = " "
+name.blank? # => true
+name = "Tom"
+name.blank? # => false
+
+# Array
+numbers = nil
+numbers.blank? # => true
+numbers = []
+numbers.blank? # => true
+numbers = [1, 2, 3]
+numbers.blank? # => false
+
+# Hash
+params = nil
+params.blank? # => true
+params = {}
+params.blank? # => true
+params = { name: "Tom", email: "hoge@hoge.com" }
+params.blank? # => false
+present?はblank?の反対で、「空ではない値」のときにtrueを返します。
+# String
+name = ""
+name.present? # => false
+name = "Tom"
+name.present? # => true
+「空なら別の値を代入」の代わりにpresenceを使う
+
+if user.name.blank?
+  name = "What's your name?"
+else
+  name = user.name
+end
+name = user.name.presence || "What's your name?"
+"".presenceや[].presenceはnilを返すので注意してください。(blank?かどうかを判別しているため)
+name = ""
+puts name.presence || "What's your name?" # => What's your name?
+2014.11.12 追記
+presence を使うと便利なイディオムがありました。
+# Newsが1件でも存在すればメール送信＆ツイート発信
+good_news = company.good_news
+if good_news.count > 0
+  send_mail(good_news)
+  tweet(good_news)
+end
+上のようなコードはpresenceを使うと一行で代入と条件判断ができます。
+if good_news = company.good_news.presence
+  send_mail(good_news)
+  tweet(good_news)
+end
+company.good_news.presence は company.good_news が0件だと nil が返るので false 扱いになり、if文の中が実行されません。
+同様に、「文字列に何かしらの値が入っている場合」を分岐させるケースでも役立ちます。
+# nameがnilや空文字列（""）だったらメッセージを表示したくない
+name = blog.user.name
+if name.present?
+  show_message("Hello, #{name}!")
+end
+if name = blog.user.name.presence
+  show_message("Hello, #{name}!")
+end
+存在の有無を確認する場合はblank?/present?を積極的に使う
+
+Rubyの標準APIではnil?やempty?のように「無い」を表すメソッドしかないので、「もしあるなら」をコードで表現するとぎこちなくなります。
+if user
+  # userがいれば、何かを実行する
+  # =>「もしuserがいれば」ではなく「もしuserなら」と読めてしまう
+end
+
+unless users.empty?
+  # usersが空ではないなら、何かを実行する
+  # => empty?の逆がないので、否定形で条件を書かざるを得ない
+end
+Railsであれば、present?を使って「もしあれば」を明示的に書くことができます。
+if user.present?
+  # userがいれば、何かを実行する
+  # =>「もしuserがいれば」と明示的に読める
+end
+
+if users.present?
+  # usersに1つ以上の要素があれば、何かを実行する
+  # => 肯定形で条件が書ける
+end
+文字列の存在チェックはnil?ではなく、blank?を積極的に使う
+
+「文字列に値が入っていない」状態はnilと""の区別をしないことが多いと思います。
+(nilは空白だが""は空白ではない、とわざわざ区別することはほとんどないはず)
+nil?を使うと""は入力済みであるというような条件文を書いてしまう恐れがあります。
+なのでRailsではnil?の代わりにblank?を使う癖を付けておく方が良いです。
+if email.nil?
+  # => emailが "" なら入力済みとして扱われてしまい、コールされない
+  puts "Please input email!"
+end
+if email.blank?
+  # => emailが "" や " " の場合でも未入力と扱われるので、コールされる
+  puts "Please input email!"
+end
+同じ理由でModelのvalidatesで指定するオプションも、特別な理由が無い限りallow_nil: trueではなく、allow_blank: trueを使うようにしましょう。
+参考: http://edgeguides.rubyonrails.org/active_record_validations.html#common-validation-options
+ロジックではなく、クエリでフィルタリングする
+
+Ruby編で配列の便利なメソッドをいろいろ紹介しましたが、RailsのModelをフィルタリングしたい場合は配列を操作するのではなく、データベース(SQL)上でフィルタリングした方が効率的です。
+def admin_users
+  User.all.select(&:admin?)
+end
+def admin_users
+  User.where(admin: true)
+end
+mapではなく、pluckを使う
+
+pluckを使うと必要なカラムだけをデータベースから取得するので処理効率が良くなります。
+def admin_user_ids
+  User.where(admin: true).map(&:id)
+end
+def admin_user_ids
+  User.where(admin: true).pluck(:id)
+end
+Railsにおけるタイムゾーンの扱いを理解する
+
+Railsの場合、application.rbに設定したタイムゾーンが使われる場合と、環境変数 TZ に設定されたタイムゾーンが使われる場合の2パターンがあります。
+両者のタイムゾーン設定が異なる場合、予期せぬ不具合が生まれる恐れがあります。
+そうした不具合を防ぐため、コード内ではapplication.rbに設定されたタイムゾーンを使うように統一することが望ましいです。
+具体的には、Date.todayではなくDate.currentを、Time.nowではなくTime.current（またはTime.zone.now）を使うようにしてください。
+詳しい内容はこちらの記事にまとめてあるので読んでみてください。
+RubyとRailsにおけるTime, Date, DateTime, TimeWithZoneの違い
+日付や日時の便利メソッドを活用する
+
+システム日付から見た昨日/明日を求める
+
+Date.current # => Tue, 05 Nov 2013
+
+Date.yesterday  # => Tue, 04 Nov 2013
+Date.tomorrow # =>  # => Tue, 06 Nov 2013
+システム日時から見たxx年前/後、xxヶ月前/後、xx週間前/後、xx日前/後、etcを求める
+
+Date.current # => 2013-11-05
+
+2.years.ago   # => 2011-11-05 06:21:40 +0900
+2.years.since # => 2015-11-05 06:21:40 +0900
+
+2.months.ago   # => 2013-09-05 06:21:40 +0900
+2.months.since # => 2014-01-05 06:21:40 +0900
+weeks, days, hours, minutes, secondsでも同じように使えます。
+特定の日付/日時から見た昨日/明日、先週/来週、xx日前/後、etcを求める
+
+結果を求める方法は一つだけでなく、いろいろな書き方があります。
+date = Date.current # => 2013-11-05
+
+date.yesterday # => 2013-11-04
+date.tomoroow  # => 2013-11-06
+
+date.prev_day # => 2013-11-04
+date.next_day # => 2013-11-06
+
+date.prev_day(2) # => 2013-11-03
+date.next_day(2) # => 2013-11-07
+
+date - 2.days # => 2013-11-03
+date + 2.days # => 2013-11-07
+
+date.ago(2.days)   # => 2013-11-03
+date.since(2.days) # => 2013-11-07
+
+date.prev_month # => 2013-10-05
+date.next_month # => 2013-12-05
+
+date.prev_month(2) # => 2013-09-05
+date.next_month(2) # => 2014-01-05
+
+date - 2.months # => 2013-09-05
+date + 2.months # => 2014-01-05
+
+date.months_ago(2)   # => 2013-09-05
+date.months_since(2) # => 2014-01-05
+
+date.ago(2.months)   # => 2013-09-05
+date.since(2.months) # => 2014-01-05
+week, year等でも考え方は同じです。
+Time型でも使えます。
+ある日付/日時から見た始まりと終わりの日付/日時を求める
+
+date = Date.current # => 2013-11-05
+
+date.beginning_of_month # => 2013-11-01
+date.end_of_month       # => 2013-11-30
+
+date.beginning_of_day # => 2013-11-05 00:00:00 +0900
+date.end_of_day       # => 2013-11-05 23:59:59 +0900
+
+datetime = Time.current # => 2013-11-05T06:43:53+09:00
+
+datetime.beginning_of_hour # => 2013-11-05T06:00:00+09:00
+datetime.end_of_hour       # => 2013-11-05T06:59:59+09:00
+week, year等でも考え方は同じです。
+Time型でも使えます。
+1日の初めから終わりまで、月の初めから終わりまで、といった範囲を求める
+
+all_xxx メソッドを使うと、「xxxの始めから終わりまで」をRangeオブジェクトとして取得できます。
+time = Time.current
+# => Mon, 23 Nov 2015 16:45:23 JST +09:00
+
+# その日の始まりと終わりの日時を取得
+time.all_day
+# => Mon, 23 Nov 2015 00:00:00 JST +09:00..Mon, 23 Nov 2015 23:59:59 JST +09:00
+
+# その日から見た月の始まりと、月の終わりの日時を取得する
+time.all_month
+# => Sun, 01 Nov 2015 00:00:00 JST +09:00..Mon, 30 Nov 2015 23:59:59 JST +09:00
+
+# その日から見た年の始まりと、年の終わりの日時を取得する
+time.all_year
+# => Thu, 01 Jan 2015 00:00:00 JST +09:00..Thu, 31 Dec 2015 23:59:59 JST +09:00
+他にもall_weekやall_quarterといったメソッドが定義されています。
+ある日付から見た先週/来週のxx曜日を求める
+
+date = Date.current # => 2013-11-05
+date.tuesday?     # => true
+
+date.prev_week(:monday) # => 2013-10-28
+date.next_week(:monday) # => 2013-11-11
+他の曜日でも考え方は同じです。
+その他の情報源
+
+日付、日時の操作例を挙げ始めるとキリがないので、詳しくはActiveSupportのAPIを参照してください。
+http://guides.rubyonrails.org/active_support_core_extensions.html
+語形やフォーマットを変える (2013.11.14追記)
+
+# キャメルケースにする
+"my_book".camelize # => "MyBook"
+
+# アンダースコア区切り(スネークケース)にする
+"MyBook".underscore # => "my_book"
+
+# ダッシュ(ハイフン)区切りにする
+"my_book".dasherize # => "my-book"
+
+# 複数形にする
+"book".pluralize            # => "books"
+"person".pluralize          # => "people"
+"fish".pluralize            # => "fish"
+"book_and_person".pluralize # => "book_and_people"
+"book and person".pluralize # => "book and people"
+"BookAndPerson".pluralize   # => "BookAndPeople"
+
+# 単数形にする
+"books".singularize            # => "book"
+"people".singularize           # => "person"
+"books_and_people".singularize # => "books_and_person"
+"books and people".singularize # => "books and person"
+"BooksAndPeople".singularize   # => "BooksAndPerson"
+
+# 人間が読みやすくする(一文字目は大文字 + スペース区切り)
+"my_books".humanize # => "My books"
+
+# タイトル形式にする(各単語の一文字目が大文字 + スペース区切り)
+"my_books".titleize # => "My Books"
+
+# クラス名にする(キャメルケース + 単数形)
+"my_book".classify  # => "MyBook"
+"my_books".classify # => "MyBook"
+
+# テーブル名にする(アンダースコア区切り + 複数形)
+"my_book".tableize # => "my_books"
+"MyBook".tableize  # => "my_books"
+その他の情報源
+
+constantizeやdemodulizeなど、個人的に使用頻度が低そうだなと思ったメソッドは紹介しませんでした。
+他のメソッドも気になる方はRailsのAPIドキュメントを参照して下さい。
+http://apidock.com/rails/String
+余分なスペースや改行を取り除く (2013.11.14追記)
+
+"    My    \r\n  \t   \n   books       ".squish # => "My books"
+まとめ: 良いコードを書くために
+
+魚ではなく、「魚の釣り方」を覚える
+
+「遠回り」や「車輪の再発明」をする前に、もっと良い書き方はないか、すでに同じメソッドが用意されていないか、書籍やAPIドキュメントをしっかり読みましょう。
+プログラミング言語 Ruby - オライリージャパン
+Rails3レシピブック 190の技 - ソフトバンククリエイティブ
+ruby-doc.org
+String
+Array
+Hash
+Enumerable
+RailsGuides
+Active Support Core Extensions
+Active Record Query Interface
+チーム内でコードレビューをする
+
+書籍やAPIドキュメントだけでなく、同僚の知見も有効な情報源です。
+チーム内で定期的にコードレビューを行い、お互いの知見を交換しあいましょう。
+また、コードの短さや簡潔さに凝りすぎると、独りよがりでわかりにくいコードを書いてしまう恐れもあるため、コードレビューを通じてチーム内で「わかりやすいコード」「わかりにくいコード」の判断基準を共有しておくことも重要です。
+おまけ: トリビア的なテクニック
+
+こういう書き方もあるけど無理して使わなくても良いかも、と思うような記法も紹介しておきます。
+「1文字」を表すのに「?+文字」を使う
+
+"index,new,create".split(',') # => ["index", "new", "create"]
+"index,new,create".split(?,) # => ["index", "new", "create"]
+タイプ量は減りますが、直感的なわかりやすさに関しては微妙かも・・・。
+配列を順番に処理するとき、直接メソッドを呼ぶ代わりに"&method(:name)"を使う
+
+普通にブロックを書く方が一般的ですが、&method(:name)みたいな引数を渡すこともできます。
+def process_users
+  users.each do |user|
+    process_user(user)
+  end
+end
+
+def process_user(user)
+  send_mail_to(user)
+  user.mail_sent_at = Time.now
+  user.save
+end
+def process_users
+  users.each(&method(:process_user))
+end
+
+def process_user(user)
+  send_mail_to(user)
+  user.mail_sent_at = Time.now
+  user.save
+end
+配列を順番に処理するとき、ブロックを直接書く代わりにlambdaを使う
+
+複雑な条件式とかをlamdaにして明示的な名前を付けておくと多少読みやすくなるかも、です。
+def destroy_aged_admins(users, limiit_age)
+  users.select{|user| user.admin? &&  user.age > limiit_age }.each(&:destroy)
+end
+def destroy_aged_admins(users, limiit_age)
+  aged_admin = ->(user){|user| user.admin? && user.age > limiit_age }
+
+  users.select(&aged_admin).each(&:destroy)
+end
+でも上のサンプルだとこう書いた方がわかりやすいかな。。。
+def destroy_aged_admins(users, limiit_age)
+  aged_admins = users.select{|user| user.admin? && user.age > limiit_age }
+  aged_admins.each(&:destroy)
+end
+何が何でもtrueかfalseで条件分岐させたいとき、!!を使う
+
+Rubyではfalseとnilがfalse、それ以外の値がすべてtrueと評価されます。
+JavaやC#を長くやっていたので最初は僕も違和感がありましたが、使っているうちにこれはこれで良くできてるなと感じてきました。
+しかし、世の中には「わしゃtrueかfalseで条件分岐させなきゃイヤなんぢゃ！！」というプログラマもいるかもしれません。
+そんな人は「イヤなんぢゃ！！」の!!を値の前に付ければ、Rubyが必ずtrueかfalseを返してくれます。
+!!nil   # => false
+!!false # => false
+!!0     # => true
+!![]    # => true
+!!true  # => true
+実はBasicObjectクラスには!というメソッドが用意されているので、こんな書き方もできます。
+nil.!.!   # => false
+false.!.! # => false
+0.!.!     # => true
+[].!.!    # => true
+true.!.!  # => true
+このメソッドを使えば、nil?やempty?の逆も作れます。
+puts "User exists!" if user.nil?.!
+puts "Some users exist!" if users.empty?.!
+・・・が、何もそこまでがんばる必要はないんじゃないかと僕は思います ^^;

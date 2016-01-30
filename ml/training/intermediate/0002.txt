@@ -1,0 +1,170 @@
+JavaScript中級者への道【1. 関数はオブジェクトの一種】
+
+JavaScript中級者への道【1.関数はオブジェクトの一種】
+
+JavaScriptのつまづきやすそうなところ
+
+関数はオブジェクトの一種 ← いまここ
+4種類のthis
+関数スコープ
+非同期関数
+コールバック関数
+クロージャ
+プロトタイプ継承
+クラスベースにおける関数
+
+クラスベースの類の言語でいえば、関数とはメソッドのこと。
+即ち、クラスという設計図の中で定義し、オブジェクトの持ち物として機能するものでした。
+java
+public class Human {
+    // プロパティ
+    private String name;
+    private int age;
+
+    // コンストラクタ
+    Human (String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // メソッド
+    public void greet () {
+        System.out.println("My name is " + this.name);
+        System.out.println("I'm " + this.age + " years old");
+    }
+}
+
+public class Main {
+    public static void main (String[] args) {
+        Human matsuby = new Human("matsuby", 24);
+        matsuby.greet();
+    }
+}
+greetメソッドはHumanクラスありき、単体では存在出来ないものです。
+(※リフレクションは使用しない & Java8は知らないという前提で書いています)
+JavaScriptにおける関数
+
+javascript
+// 関数式
+var sum = function (x, y) {
+  console.log(x + y);
+};
+sum(1, 2);
+
+
+// 関数宣言
+function multiply (x, y) {
+  console.log(x * y);
+}
+multipley(3, 4);
+
+
+// コンストラクタ
+function Human (name, age) {
+  this.name = name;
+  this.age = age;
+}
+var matsuby = new Human('matsuby', 24);
+
+
+// メソッド(+オブジェクトリテラル)
+var myObj = {
+  hello : function () {
+    console.log('hello');
+  }
+}
+myObj.hello();
+
+
+// 即時関数
+(function (x, y) {
+  console.log('x : ' + x);
+  console.log('y : ' + y);
+})(5, 6);
+なんか色々出てきたし、即時関数に至っては初見殺しですね。
+よくもそんな文法がまかり通ったものだと思います。
+「関数がオブジェクトである」とはどういう意味か?
+
+オブジェクト無しに、関数が単体として存在出来ます
+var dependence = function () {
+  console.log('I am free!');
+};
+関数にプロパティやネストした関数を持たせることが出来ます
+// havingという変数に関数を代入(関数式)
+var having = function () {
+  var privateValue = 'private';
+  var privateFunc = function () {
+    console.log(privateValue);
+  }
+  privateFunc();
+};
+
+// havingに後付けでプロパティや関数を追加することも出来る
+having.publicValue = 'public';
+having.publicFunc = function () {
+  console.log(having.publicValue);
+};
+
+// 色々と実行したりアクセスしてみる
+having();                          // 'private'
+
+console.log(having.privateValue);  // 'undefined'
+having.privateFunc();              // 'TypeError'
+
+console.log(having.publicValue);   // 'public'
+having.publicFunc();               // 'public'
+JavaScriptのスコープは別の機会で取り上げる予定ですが、参考まで。
+関数の引数として、関数を渡すことが出来ます
+// コンソールにHelloと表示する関数
+var sayHello = function () {
+  console.log('Hello');
+};
+
+//　引数として受け取った関数を実行した後、コンソールにWorldと表示する関数
+var sayXXXWorld = function (otherFunc) {
+  otherFunc();
+  console.log('World');
+};
+
+// 用意しておいた関数を渡したり
+sayXXXWorld(sayHello);           // 'Hello World' (2行で表示されます)
+
+// その場で無名関数を作って渡したりすることも出来る
+sayXXXworld(function () {
+  console.log('It\'s a small');  // 'It's a small World' (2行で表示されます)
+});
+関数を引数に渡せることで、コールバックと呼ばれる仕組みを利用することが出来ます。
+これは、「非同期処理における処理の実行順序を制御する」といった使われ方をします。
+関数の戻り値として、関数を返すことが出来ます
+// 戻り値が関数となる関数を定義
+function createCounter () {
+  var count = 0;
+  // この無名関数が戻り値となる
+  return function () {
+    count++;
+    console.log(count);
+  }
+}
+
+// createCounter()を呼び出すと、counter1とcounter2には関数が代入される
+var counter1 = createCounter();
+var counter2 = createCounter();
+counter1();  // 1
+counter2();  // 1
+counter1();  // 2
+counter2();  // 2
+counter1();  // 3
+counter2();  // 3
+上記はクロージャと呼ばれるもので、関数に対して状態を持たせたり、
+プライベートなメンバを実現する為に使われたりします。
+(※手段は色々あると思うので、深く突っ込まないでいただけるとありがたい)
+まとめ
+
+JavaScriptにおける関数はとても自由で、度肝を抜かれます。
+ただ、自由な分「何を選択すれば良いのか」が難しい部分もあります。
+いきなり「関数が引数として渡せます！戻り値にも渡せます！」となったところで、
+嬉しさはあまりないでしょう。(使いどころが良くわからないというのが大きい)
+「非同期関数の実行順序を制御したい」「関数型プログラミングしたい」「カプセル化したい」
+といった要望ベースで色々なやり方を覚えていくのが良いのではないかと思います。
+とはいっても、初めは見よう見まねでやっていくしかないんですけどね。
+以上。
