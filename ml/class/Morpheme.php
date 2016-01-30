@@ -19,18 +19,13 @@ class Morpheme {
 
     /* 形態素解析結果(戻り値用) */
     $morphemeList = array();
-
-    /* @var array mecabの形態素解析結果を1行ごとに分割したもの */
-    $mecabResult = explode("\n", $this->mecab->parse($text));
-
     /* mecabの形態素解析結果を1行単位に分割したもの */
     $resultSet = explode("\n", $this->mecab->parse($text));
 
     foreach($resultSet as $eachResult) {
-      if(substr($eachResult, 0, 3) !== 'EOS' && !empty($eachResult)) {
+      if(substr($eachResult, 0, 3) !== 'EOS' && !empty($eachResult) && !strstr($eachResult, "記号")) {
         /* 形態素と情報部分に分割する */
         list($eachMorpheme, $eachInfo) = explode("\t", $eachResult);
-
         /* 情報部分をリストに分割する */
         $infoColumns = explode(',', $eachInfo);
 
