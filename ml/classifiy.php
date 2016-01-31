@@ -12,6 +12,7 @@ $bayes->pdoPassword = 'root';
 /* @var object Corpus クラスから生成したオブジェクト */
 $corpus = new Corpus();
 
+$classifiyScore = 0.0;
 $classifiyScores = array();
 $corpusBody = null;
 
@@ -51,9 +52,17 @@ foreach($categoryList as $eachCategory) {
   */
   $bayes->loadDictionary($eachCategory, 2);
 
-  $classifiyScores = $bayes->culcDocumentScore($corpus->getContent($argv[1]));
+  $classifiyScore = $bayes->culcDocumentScore($corpus->getContent($argv[1]));
 
-  printf("%s\n", $classifiyScores);
+  $classifiyScores = array_merge($classifiyScores, [$eachCategory => $classifiyScore]);
+
+  printf("%s\n", $classifiyScore);
   printf("\n\n");
 }
+
+arsort($classifiyScores);
+
+$corpus->createCurpus(key(array_slice($classifiyScores, 0, 1, true)), $corpus->getContent($argv[1]))
+
+
 ?>

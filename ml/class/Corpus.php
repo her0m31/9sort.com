@@ -13,7 +13,6 @@ class Corpus {
   */
   function getCategoryList($base_dir) {
     $dh = opendir($base_dir);
-    var_dump($base_dir);
     if(is_resource($dh)) {
       /* @var array カテゴリリスト */
       $categoryList = array();
@@ -89,7 +88,7 @@ class Corpus {
   }
 
   /** コーパスのパスを指定し、内容を取得する。
-  * @param string file_path 投稿メールテキストのパス
+  * @param string file_path 投稿テキストのパス
   * @return string 内容
   */
   function getContent($file_path) {
@@ -123,6 +122,19 @@ class Corpus {
   */
   function getTestContent($path) {
     return $this->getContent(sprintf('%s/%s', $this->testRoot, $path));
+  }
+
+  function getTrainingCorpusCount($category) {
+    return count($this->getFilePathList($this->trainingRoot, $category));
+  }
+
+  function createCurpus($category, $corpusBody) {
+    $fileName = sprintf('%s.txt', $this->getTrainingCorpusCount($category) + 1);
+    touch(sprintf('%s/%s/%s', $this->trainingRoot, $category, $fileName));
+
+    $handle = fopen(sprintf('%s/%s/%s', $this->trainingRoot, $category, $fileName), 'w');
+    fwrite($handle, $corpusBody);
+    fclose($handle);
   }
 }
 ?>
