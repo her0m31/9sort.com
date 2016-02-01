@@ -8,20 +8,20 @@ require_once('class/Morpheme.php');
 /* BayesLearning クラスを読み込む */
 require_once('class/BayesLearning.php');
 /* @va object BayesLearning_Kentei クラスから生成したオブジェクト */
-$bayesKentei = new BayesLearning();
+$bayes = new BayesLearning();
 /* MySQLに接続するためのパスワードを記入すること */
-$bayesKentei->pdoPassword = 'root';
+$bayes->pdoPassword = 'root';
 /* @var object Corpus クラスから生成したオブジェクト */
-$ckentei = new Corpus();
+$corpus = new Corpus();
 
-if(is_object($ckentei)) {
-  if(is_object($bayesKentei)) {
+if(is_object($corpus)) {
+  if(is_object($bayes)) {
     printf("***********************************************************\n");
     printf("ベイジアンフィルタ : 単語スコアの確認\n");
     printf("***********************************************************\n");
 
     /* 各カテゴリの分類辞書をメモリ上に読み込み、スコアが大きい順に100個ずつ表示する */
-    $categoryList = $ckentei->getTrainingCategoryList();
+    $categoryList = $corpus->getTrainingCategoryList();
 
     foreach($categoryList as $eachCategory) {
       printf("●カテゴリ : %s\n", $eachCategory);
@@ -29,13 +29,13 @@ if(is_object($ckentei)) {
       /** 分類辞書をメモリ上に読み込む。
       * より特徴的な単語を絞り込むため、そのカテゴリで20回以上出現している単語に絞り込む（第2引数に20を指定）
       */
-      $bayesKentei->loadDictionary($eachCategory, 20);
+      $bayes->loadDictionary($eachCategory, 20);
 
       /* スコアが大きい順にソートする */
-      arsort($bayesKentei->dictionary);
+      arsort($bayes->dictionary);
 
       $showCount = 0;
-      foreach($bayesKentei->dictionary as $eachWord => $eachScore) {
+      foreach($bayes->dictionary as $eachWord => $eachScore) {
         printf("単語 %s = %f\n", $eachWord, $eachScore);
 
         ++$showCount;
