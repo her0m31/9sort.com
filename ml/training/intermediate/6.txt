@@ -1,0 +1,28 @@
+Unity5.3でオブジェクトの色を変えたかった話。
+UnityのC#スクリプトから、オブジェクトの色を変えたかったんですが、ちょっと詰まってしまったので書き残しておきます。
+公式リファレンスなどから色を変えるには、Color( )を使えば良いらしいです。
+こんな感じ
+gameObject.GetComponent().color = new Color(243, 156, 18, 125);
+でもこれだと、変わらないどころか、インスペクターで設定した色から、白になってしまう。。。。
+色々調べて見ると、０〜255の値ではなく、０〜１の値にしなければいけないらしい。
+参考
+GetComponent().color = new Color(1, 0, 0, 1);
+gameObject.GetComponent().color = new Color( 243.0f / 255.0f, 156.0f / 255.0f, 18.0f / 255.0f, 125.0f / 255.0f );
+それぞれの値に、( / 255.0f )すると解決しました。
+おわり
+
+インスペクターパネルとかの設定が0~255とかなので、スクリプトでも同じだと思ってました。。。。
+
+mikeneko
+0 contribution
+2015/12/30 10:30
+Thankを伝えました
+0-255範囲がよいのでしたらColor32というものがありますよ。
+http://docs.unity3d.com/ja/current/ScriptReference/Color32.html
+
+her0m31
+111 contribution
+2015/12/30 11:11
+0 Thanks •編集•削除
+@mikeneko なるほど、ちゃんとあるんですね！
+ありがとうございます！

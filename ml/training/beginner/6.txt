@@ -1,0 +1,248 @@
+vagrantを使ったLAMP環境をローカルに作る手順③ 〜必要ファイルをインストールしてLAMP環境を完成させよう〜
+vagrantを使ったLAMP環境をローカルに作る手順①
+vagrantを使ったLAMP環境をローカルに作る手順②
+に引き続きPHPとmysqlを使うための環境構築をガシガシ進めてきましょう。
+こちらの作業もvagrantに大きな影響を与える重要な処理になりますので
+su
+password vagrant  ←passwordを聞かれるのでvagrantと入力します。（ターミナル上では表示されませんが入力はできています！）
+でroot権限にすることを忘れないようにしましょう。
+また本稿ではいよいよApach mysql phpのインストールをしていきます。
+処理に時間がかかりますので、wifi環境の良い場所での作業を推奨します！
+リポジトリの追加
+
+まずはインストールするために必要なリポジトリの追加を行っていきます。
+初心者の方は深く考えず
+環境構築するために必要なものを登録する
+という認識で今のところはいいと思います。
+rpm -ivh http://ftp.riken.jp/Linux/fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
+
+↑epelリポジトリの登録
+
+rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+
+↑remiリポジトリの登録
+リポジトリの登録.png
+上記２つのコマンドを順に入力して
+この画面になれば完了です！
+yum install -y http://repo.mysql.com/mysql-community-release-el6-5.noarch.rpm
+
+↑mysql-communityの登録
+次にこのコマンドを順にターミナルで入力していきましょう！
+！
+アップデート完了.png
+上の画面のようにComplete!が出ればOKです！
+Apachのインストール
+
+上記で各種インストールの準備ができましたので
+いよいよ各種インストールに移ります。
+①Apachのインストール
+
+yum install httpd httpd-devel -y
+アップデート完了.png
+この画面になれば完了です！
+②Apachの起動
+
+インストールしただけでは動いでくれないのでまずは起動しましょう！
+service httpd start
+うまくstartできたらOKと教えてくれます！
+③Apachの自動起動をon
+
+次にこのコマンドで自動起動を設定しておきましょう。
+このコマンドを打たなければターミナルを立ち上げる毎に毎回
+立ち上げなければならなくなり、
+あれ！？
+となってしまいます。
+chkconfig httpd on
+こちらは反応がありませんが、正常にできているはずです。
+寂しいですね。
+これでApachのインストールは完了です！
+ひき続きmysqlをインストールしましょう！
+mysqlのインストール
+
+①mysqlのインストール
+
+yum install -y mysql mysql-server mysql-devel
+アップデート完了.png
+Complete!が出ればOKですね。
+②mysqlの起動
+
+Apachと同じように起動させましょう。
+service mysqld start
+こちらも完了すればOKと表示されます。
+③mysqlの自動起動をon
+
+自動機能も設定しておきます。
+chkconfig mysqld on
+こちらはリアクションがありません。
+④mysqlの初期設定
+
+次にmysqlを使うためのpasswordを設定しましょう。
+mysql_secure_installation
+このコマンドを打ったらいろいろ聞かれますが以下の順序で
+指定してください
+○ そのままEnter
+
+○ Yと打ってEnter
+
+○ mysqlと打ってEnter ←mysqlのパスワードをmysqlに設定
+
+○ mysqlと打ってEnter ←パスワードを再入力
+
+○ Yと打ってEnter
+
+○ Yと打ってEnter
+
+○ Yと打ってEnter
+
+○ Yと打ってEnter
+mysqlパスワード設定完了.png
+これでmysqlのインストールは完了です！
+⑤phpMyAdminをインストール
+
+次にmysqlをGUI(視覚的)に使えるphpMyAdminをインストールしておくと良いでしょう。
+yum install -y --enablerepo=remi,remi-php55 phpMyAdmin
+アップデート完了.png
+Complete!が完了の目印です！
+phpのインストール
+
+パッケージのインストール
+
+yum install ­y ­­enablerepo=epel libmcrypt
+y/Nと途中で聞かれるので、
+もちろんyと答えましょう！
+php5.5のインストール
+
+無事comlete!できたら次に下記のコマンドを入力します。
+yum install -y --enablerepo=remi,remi-php55 php php-devel php-pear php-mbstring php-xml php-mcrypt php-gd php-pecl-xdebug php-opcache php-pecl-apcu php-fpm php-phpunit-PHPUnit php-mysqlnd
+アップデート完了.png
+これでphpのインストールは完了です！
+時刻設定
+
+ここまで出来ましたら開発環境の時刻設定までしておきましょう！
+centosの時刻設定
+
+cp /usr/share/zoneinfo/Japan /etc/localtime
+このコマンドを入力した後で
+cp: overwrite @/etc/localtime'?
+と聞かれたら　yと入力すればOKです。
+こちらも反応がありません。
+phpの時刻設定
+
+こちらはvimでの編集が必要です。
+vim /etc/php.ini
+修正したい箇所を探すために:set numberで行数を振り当てます。
+その後どんどん下を確認していくと
+873行目あたりに
+php時刻設定編集前.png
+が確認できるはずです。
+iでインサートモードへ切り替えたあとに
+date.timezone ='Asia/Tokyo'
+に修正してください！
+このように編集できればOKです。
+php時刻設定編集後.png
+そのあとでエスケープキーでノーマルモードにもどり
+:wq
+で保存して終了しましょう！
+インストールの確認
+
+ここまでできればひとまず環境構築は完成したと言っていいでしょう！
+バージョンの確認
+
+mysqlとphpが正しくダウンロードできているかコマンドで確認します。
+mysql --version   ←mysqlのバージョン確認
+php -v            ←phpのバージョン確認
+mysqlのバージョンが5.6
+phpのバージョンが5.5であれば正しくインストール出来ています。
+vimでhelloworldを入力.png
+ブラウザで確認
+
+最後に実際にブラウザに表示されるかを確認しておきましょう！
+おきまりのhello worldをphpで記述し、ブラウザに表示します。
+○ cd　←ディレクトリの一番上にもどる
+
+○ cd /var/www/html　←/var/www/htmlに移動
+
+○ vim index.php　←index.phpを作成編集
+ここれでvimエディタを使ってindex.phpを編集することができます。
+次に実際のphpコードを書いてみましょう。
+<?php
+    echo "hello world";
+?>
+hello worldコード.png
+このように記載できたら:wqで保存して終了します。
+保存できたら、
+ service httpd restart　
+のコマンドでApachを再起動しましょう。
+ここまで出来たらブラウザで実際に表示されるかを確認します。
+○ ブラウザで確認
+safariやgoogle chromなどのブラウザを開く
+
+192.168.33.10/index.php にアクセス
+//192.168.33.10はVagrantfileのIPアドレスの初期設定です。
+
+ブラウザに Hello Worldが表示されればok
+ブラウザで表示されたものを確認.png
+これで作った開発環境で自分の作成したコードがブラウザに表示されることが確認できました！
+vagrant権限へ変更
+
+しかし、このままでは
+vagrant権限で、作成したファイルの編集はできません。
+管理者変更前html.png
+このようにhtmlディレクトリの権限設定がrootになっているため作成したファイルも
+root権限でしか編集できなくなっています。
+そのために
+vagrant権限
+で編集するために権限の変更をしておきましょう！
+cd ../　ひとつ上のディレクトリに移動
+sudo chown vagrant html　←htmlディレクトリをvagrantに変更
+このコマンドによってhtmlディレクトリをvagrant権限に変更します。
+管理者権限vagrant変更後.png
+このように変更できればOKです！
+この後に作成した画面を確認してみます。
+ファイル権限の確認.png
+このように
+先のコマンドを使う前に作成した
+index.phpの管理者がrootに対し
+hoge.htmlの管理者はvagrantになっていることがわかります。
+これでvagrant権限でのファイルの作成/編集ができるようになりました！
+おめでとうございます！
+ここまでできたあなたはもうPHPとmysqlを使って
+世界で活躍できるエンジニア
+としての切符を手に入れたも同然です！！
+この記事は以下の記事からリンクされています
+vagrantを使ったLAMP環境をローカルに作る手順② 〜インストールの準備を整えよう〜からリンク4ヶ月前
+vagrantを使ったLAMP環境をローカルに作る手順① ~Vagrantfileを作成しよう！~からリンク4ヶ月前
+
+_tana_mochi
+0 contribution
+2015/10/20 12:55
+Thank
+お世話になっております。
+もし間違っていたら申し訳ないのですが、php.iniの修正後の画像が
+;date.timezone ='Asia/Tokyo'
+になっているのでコメント扱いになってないでしょうか？
+それと細かいですが
+「date.timezone ='Asia/Tokyo'」
+ここだけ「」が付いていたので「」付きで書くものかとも少し迷ってしましました。
+あと一つ
+hoge.php
+画像ではhoge.htmlになっています。
+私でも環境の構築ができました！
+とても素晴らしい資料をありがとうございます！
+
+Dicrotect
+32 contribution
+2015/10/20 21:51
+Thank
+@_tana_mochi 様
+貴重なご意見ありがとうございます！
+まだまだ統一感もないので、
+いただいたご意見を参考に校正いたします。
+今後とも宜しくお願いいたします。
+
+taromin
+0 contribution
+2015/10/25 00:39
+Thank
+はじめて仮想環境を設定するために参考にしました。
+大変助かりました。ありがとうございました。
