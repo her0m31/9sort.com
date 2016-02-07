@@ -1,0 +1,19 @@
+/* frame.php css */
+/* 2段組用のcss */
+
+.content-wrapper {
+    height: 100%;
+}
+
+.left {
+    float: left;
+    width: 300px;
+    height: 100%;
+    background-color: #C0C0C0;
+    color: #ffffff;
+}
+
+.right {
+    float: left;
+    width: 1000px;
+}
