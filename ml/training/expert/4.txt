@@ -1,0 +1,103 @@
+超訳 Redux Documentation - アクション(action)
+
+Redux Documentation の Actions の超訳です。
+アクション(action)
+
+はじめに、アクションを定義しましょう。
+アクション とはアプリケーションからストアに送るデータを載せるもので、ストアにとっては 唯一 の情報源です。ストアへは store.dispatch() を利用してアクションを送ります。
+以下は新しいTODOを作成することを表すアクションの一例です。
+const ADD_TODO = 'ADD_TODO';
+{
+  type: ADD_TODO,
+  text: 'はじめての Redux アプリの作成'
+}
+アクションはプレーンなJavaScriptオブジェクトです。アクションは実行されるアクションの種別を表す type というプロパティを持っていなければなりません。また、type は文字列定数で定義すべきです。アプリが大きくなってくると、それらを分割したモジュールに移動させたくなるでしょう。
+import { ADD_TODO, REMOVE_TODO } from '../actionTypes';
+アクションの type の定義に関して
+
+小さなプロジェクトでは、アクションの type にはリテラル文字列を直接利用する方が容易です。しかしながら、大きなコードベースにおいて定数を明示的に宣言することはいくつか利点があります。
+詳細については Reducing Boilerplate を読んでみてください。
+type 以外にアクションオブジェクトに何を持たせるかは自由です。
+もし興味があるならば、アクションオブジェクトの構造についての推奨が Flux Standard Action にあるので確認してみてください。
+次に、TODOが完了したものとしてユーザーがチェックをつけることを表すもう一つのアクションを追加しましょう。
+配列にTODOを保存するため、完了とするTODOを index で特定します。
+{
+  type: COMPLETE_TODO,
+  index: 5
+}
+最後に、現在表示されているTODOを変更するためのアクションをもう一つ追加しましょう。
+{
+  type: SET_VISIBILITY_FILTER,
+  filter: SHOW_COMPLETED
+}
+アクションクリエータ(action creator)
+
+アクションクリエータ はその名の通りアクションを生成する関数のことです。"アクション"と"アクションクリエータ"は混同しやすいので、適切な用語を使うようにしましょう。
+伝統的な Flux における実装では、アクションクリエータは実行されたときにディスパッチを以下のように呼び出すことが多々あります。
+function addTodoWithDispatch(text) {
+  const action = {
+    type: ADD_TODO,
+    text
+  };
+  dispatch(action);
+}
+対照的に、 Redux においてはアクションクリエータは副作用のない 純粋な関数 になり、単にアクションを返すだけです。
+function addTodo(text) {
+  return {
+    type: ADD_TODO,
+    text
+  };
+}
+このようにすることで、よりポータブルになりテストがしやすくなります。ディスパッチを開始するためには、 dispatch() 関数に結果を渡します。
+dispatch(addTodo(text));
+dispatch(completeTodo(index));
+自動的にディスパッチする バウンドアクションクリエータ を生成する方法もあります。
+const boundAddTodo = (text) => dispatch(addTodo(text));
+const boundCompleteTodo = (index) => dispatch(completeTodo(index));
+それらは直接呼び出すことが可能です。
+boundAddTodo(text);
+boundCompleteTodo(index);
+dispatch() 関数は store.dispatch() としてストアから直接呼び出すことが可能ですが、 react-redux の connect() のようなヘルパーを利用する方が良いでしょう。dispatch() 関数に多くのアクションクリエータを自動的に結びつける bindActionCreators() を利用することもできます。
+ソースコード
+
+actions.js
+
+/*
+ * アクションの種別
+ */
+
+export const ADD_TODO = 'ADD_TODO';
+export const COMPLETE_TODO = 'COMPLETE_TODO';
+export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
+
+/*
+ * その他の定数
+ */
+
+export const VisibilityFilters = {
+  SHOW_ALL: 'SHOW_ALL',
+  SHOW_COMPLETED: 'SHOW_COMPLETED',
+  SHOW_ACTIVE: 'SHOW_ACTIVE'
+};
+
+/*
+ * アクションクリエータ
+ */
+
+export function addTodo(text) {
+  return { type: ADD_TODO, text };
+}
+
+export function completeTodo(index) {
+  return { type: COMPLETE_TODO, index };
+}
+
+export function setVisibilityFilter(filter) {
+  return { type: SET_VISIBILITY_FILTER, filter };
+}
+次の節では
+
+これらのアクションをディスパッチしたときにステートをどのように更新するかを示すための レジューサ(reducer) を定義してみましょう。
+上級者のためのメモ
+
+もしあなたがすでに基本的なコンセプトに精通していてこのチュートリアルをすでに完了しているならば、AJAXレスポンスをどのように扱い、アクションクリエータを非同期コントロールフロー内にどのように組み込むかについて学ぶために 上級チュートリアル 内の 非同期アクション を確認するのを忘れないでください。

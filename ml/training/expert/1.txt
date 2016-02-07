@@ -1,0 +1,31 @@
+Modal dialog with React
+
+React Modal があるけど、作ってみたのでメモ
+jsx
+modal(show, contents){
+    if(!show){
+         return <span></span>;
+    }
+    return <div className="blind"><div className="dialog-wrapper">{contents}</div></div>;
+}
+css
+.blind {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    text-align:center;
+}
+
+.dialog-wrapper{
+    position: relative;
+    width: 500px;
+    height: 800px;
+    top: 50px;
+    margin: auto auto;
+}
+位置固定で黒背景を表示して、その子としてダイアログとなるコンポーネントを表示するだけ。
+画面閉じたりするのはkeyDownEventやボタンのイベントハンドラでお好みで
+jQuery UI Dialogでダイアログ表示してみるとReactに「管理外でDOMを変更するな！」と怒られる

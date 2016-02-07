@@ -1,0 +1,84 @@
+vagrantを使ったLAMP環境をローカルに作る手順② 〜インストールの準備を整えよう〜
+
+vagrantを使ったLAMP環境をローカルに作る手順①
+に引き続きvagrantでLAMP環境をつくるために必要な
+Apach mysql phpのインストールをターミナルで進めていきましょう。
+なお以降の作業は権限の高いrootにユーザを変更しなくてはなりません。
+su
+password vagrant  ←passwordを聞かれるのでvagrantと入力します。（ターミナル上では表示されませんが入力はできています！）
+この手順でrootにユーザを変更することを忘れないようにしましょう。
+[root@vagrant-centos65 vagrant]#
+#これは入力するコードではありません。
+ターミナルにこのように表示されれば正しくrootユーザへの切り替えができています！
+OSのアップデートと開発に必要なファイルのインストール
+
+OSのアップデート
+
+まずは最新版を正しくインストールするためにcentosをアップデートします。
+ yum update -y  #OSのパッケージを全て最新にアップデート
+アップデートするファイルが173個もありました！
+とっても時間がかかるので通信速度の速い場所でのインストールを
+推奨します。
+アップデート完了.png
+Complete!がでると気持ちがいいですね！
+ファイルのインストール
+
+次に開発に必要なファイルをインストールしていきます。
+ yum groupinstall -y "Development Tools" --skip-broken
+ ↑　開発基本ツール群をインストール
+
+
+ yum install -y openssl-devel readline-devel zlib-devel curl-devel ImageMagick ImageMagick-devel glib2-devel gd-devel libxml2-devel libxslt-devel pcre-devel perl-devel perl-ExtUtils-Embed w3m wget vim bind-utils
+
+ ↑ 開発で多くの場合必要とされるパッケージ群をインストール(ある程度の一般性は担保できているとは思います)
+こちらもとっても時間がかかります。
+通信速度でエラーが出る場合がありますが一度停止してしまった場合は
+もう一度同じコマンドを打ちましょう！
+アップデート完了.png
+これでいいですね！
+各種設定の変更
+
+日本語対応の準備
+
+こちらはvimでの編集が必要です。
+まずはこのコマンドを入力しましょう。
+vim /etc/sysconfig/i18n
+するとvimエディタがひらき、
+以下の文字が表示されてるはずです。
+i18編集前.png
+このままでは日本語を入力した際に不具合を起こす可能性があります。
+そこでvimエディタを使って以下の手順で編集します。
+キーボードのiを押してインサートモードへ
+
+
+  LANG="ja_JP.UTF-8"
+
+に変更
+
+＊vimでiを使ってインサートモードに入ると
+ カーソルの手前の文字を認識するので入力に注意。
+i18n編集後.png
+このように変更できたら
+escキーでノーマルモードに戻り、
+:wq
+で保存しましょう！
+ファイヤーウォールの無効化
+
+次に開発用にセットアップするために必要な処理を行います。
+ service iptables stop     # ファイアウォールを停止
+
+ chkconfig iptables off        # ファイアウォールの自動起動を停止
+ターミナルは何も反応してくれませんがこれで問題ないはずです。
+ここまで完了したらいよいよ
+Apach mysql phpのダウンロードに移ります。
+しかし、安全に次のダウンロードをするために
+いったんvagrantを再起動しましょう。
+exit　　　　　　　　←root権限からvagrant権限に変更
+exit　　　　　　　　←vagrantから離脱
+vagrant reload   ←vagrantを再起動
+ではダウンロードは次の記事にまとめておきます！
+vagrantを使ったLAMP環境をローカルに作る手順③
+なお参考記事は
+【CentOS, LAMP】仮想マシンを立てたら最初にやっておきたい設定
+【CentOS, PHP】CentOSへのPHP5.5, MySQL5.6環境の構築
+です。
