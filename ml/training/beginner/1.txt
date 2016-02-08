@@ -10,9 +10,6 @@ RubyやRailsを始めたばかりの人は、もっと短く書く方法や便�
 昨日Qiitaに投稿した記事は普段のコードレビューの副産物 - give IT a try
 Ruby編
 
-以下はRubyの標準機能を使ったイディオムやメソッドです。
-Railsプロジェクトでもそれ以外でも使えます。(Ruby 1.9以上を想定)
-後置ifで行数を減らす
 
 if user.active?
   send_mail_to(user)
